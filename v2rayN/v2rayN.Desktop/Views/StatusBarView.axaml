@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="clr-namespace:v2rayN.Desktop.DesignData"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ctrl="using:v2rayN.Desktop.Controls"
     xmlns:resx="clr-namespace:ServiceLib.Resx;assembly=ServiceLib"
     xmlns:vms="clr-namespace:ServiceLib.ViewModels;assembly=ServiceLib"
     x:DataType="vms:StatusBarViewModel"
@@ -73,7 +74,7 @@
             </StackPanel>
 
             <StackPanel Margin="{StaticResource MarginLr8}" VerticalAlignment="Center">
-                <TextBlock x:Name="txtRunningServerDisplay" />
+                <ctrl:FlagTextBlock x:Name="txtRunningServerDisplay" />
                 <Border Margin="1" />
                 <TextBlock x:Name="txtRunningInfoDisplay" />
             </StackPanel>

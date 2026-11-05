@@ -251,9 +251,10 @@
                             Width="150"
                             Binding="{Binding ConfigType}"
                             Header="{x:Static resx:ResUI.LvServiceType}" />
-                        <DataGridTextColumn
+                        <base:MyDGTextColumn
                             Width="200"
                             Binding="{Binding Remarks}"
+                            ExName="Remarks"
                             Header="{x:Static resx:ResUI.LvRemarks}" />
                         <DataGridTextColumn
                             Width="200"
@@ -292,9 +293,10 @@
                             Width="150"
                             Binding="{Binding ConfigType}"
                             Header="{x:Static resx:ResUI.LvServiceType}" />
-                        <DataGridTextColumn
+                        <base:MyDGTextColumn
                             Width="200"
                             Binding="{Binding Remarks}"
+                            ExName="Remarks"
                             Header="{x:Static resx:ResUI.LvRemarks}" />
                         <DataGridTextColumn
                             Width="200"

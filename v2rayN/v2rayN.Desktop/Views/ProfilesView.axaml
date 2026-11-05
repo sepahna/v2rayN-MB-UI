@@ -3,6 +3,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:conv="using:v2rayN.Desktop.Converters"
+    xmlns:ctrl="using:v2rayN.Desktop.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="clr-namespace:v2rayN.Desktop.DesignData"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -298,11 +299,11 @@
                                         Content="{x:Static resx:ResUI.TipActiveServer}"
                                         IsVisible="{Binding IsActive}"
                                         Theme="{DynamicResource TagLabel}" />
-                                    <TextBlock
-                                        HorizontalAlignment="Center"
+                                    <ctrl:FlagTextBlock
+                                        HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
                                         FontWeight="{Binding IsActive, Converter={StaticResource ActiveServerFontWeightConverter}}"
-                                        Text="{Binding Remarks}" />
+                                        FlagText="{Binding Remarks}" />
                                 </StackPanel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
@@ -366,19 +367,19 @@
                         Tag="IpInfo">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock
+                                <ctrl:FlagTextBlock
                                     Margin="{StaticResource MarginLr8}"
                                     VerticalAlignment="Center"
-                                    Text="{Binding Path=IpInfo, Mode=OneWay}">
-                                    <TextBlock.ContextMenu>
+                                    FlagText="{Binding Path=IpInfo, Mode=OneWay}">
+                                    <ctrl:FlagTextBlock.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem
                                                 Click="CopyIpInfo_Click"
                                                 CommandParameter="{Binding IpInfo}"
                                                 Header="{x:Static resx:ResUI.menuEditCopy}" />
                                         </ContextMenu>
-                                    </TextBlock.ContextMenu>
-                                </TextBlock>
+                                    </ctrl:FlagTextBlock.ContextMenu>
+                                </ctrl:FlagTextBlock>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

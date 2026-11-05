@@ -3,6 +3,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:conv="using:v2rayN.Desktop.Converters"
+    xmlns:ctrl="using:v2rayN.Desktop.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="clr-namespace:v2rayN.Desktop.DesignData"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -99,11 +100,20 @@
                             Binding="{Binding ConfigType}"
                             Header="{x:Static resx:ResUI.LvServiceType}"
                             Tag="ConfigType" />
-                        <DataGridTextColumn
+                        <DataGridTemplateColumn
                             Width="200"
-                            Binding="{Binding Remarks}"
                             Header="{x:Static resx:ResUI.LvRemarks}"
-                            Tag="Remarks" />
+                            SortMemberPath="Remarks"
+                            Tag="Remarks">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ctrl:FlagTextBlock
+                                        Margin="{StaticResource MarginLr8}"
+                                        VerticalAlignment="Center"
+                                        FlagText="{Binding Remarks}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
                         <DataGridTextColumn
                             Width="200"
                             Binding="{Binding Address}"

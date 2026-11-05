@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:base="clr-namespace:v2rayN.Base"
     xmlns:reactiveui="http://reactiveui.net"
     xmlns:resx="clr-namespace:ServiceLib.Resx;assembly=ServiceLib"
     xmlns:tb="clr-namespace:H.NotifyIcon;assembly=H.NotifyIcon.Wpf"
@@ -96,7 +97,7 @@
                 </StackPanel>
 
                 <StackPanel Margin="{StaticResource MarginLeftRight8}" VerticalAlignment="Center">
-                    <TextBlock x:Name="txtRunningServerDisplay" Style="{StaticResource StatusbarItem}" />
+                    <base:FlagTextBlock x:Name="txtRunningServerDisplay" Style="{StaticResource StatusbarItem}" />
                     <Border Margin="1" />
                     <TextBlock x:Name="txtRunningInfoDisplay" Style="{StaticResource StatusbarItem}" />
                 </StackPanel>
