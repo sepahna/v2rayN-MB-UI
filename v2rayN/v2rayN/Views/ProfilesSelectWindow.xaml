@@ -102,6 +102,14 @@
                     <DataGrid.Resources>
                         <Style BasedOn="{StaticResource MaterialDesignDataGridRow}" TargetType="DataGridRow">
                             <EventSetter Event="MouseDoubleClick" Handler="LstProfiles_MouseDoubleClick" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsActive}" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.Secondary.Light}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesign.Brush.Primary}" />
+                                    <Setter Property="BorderThickness" Value="4,0,0,0" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
+                                </DataTrigger>
+                            </Style.Triggers>
                         </Style>
                         <Style BasedOn="{StaticResource MaterialDesignDataGridColumnHeader}" TargetType="DataGridColumnHeader">
                             <EventSetter Event="Click" Handler="LstProfiles_ColumnHeader_Click" />
@@ -111,9 +119,10 @@
                             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding IsActive}" Value="True">
-                                    <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
-                                    <Setter Property="Foreground" Value="Black" />
-                                    <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesign.Brush.Primary.Light}" />
+                                    <Setter Property="Background" Value="{DynamicResource MaterialDesign.Brush.Secondary.Light}" />
+                                    <Setter Property="Foreground" Value="{DynamicResource MaterialDesign.Brush.Secondary.Light.Foreground}" />
+                                    <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesign.Brush.Secondary.Light}" />
+                                    <Setter Property="FontWeight" Value="SemiBold" />
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>

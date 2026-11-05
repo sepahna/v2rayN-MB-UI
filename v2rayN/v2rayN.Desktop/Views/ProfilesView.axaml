@@ -16,6 +16,10 @@
     mc:Ignorable="d">
     <UserControl.Resources>
         <conv:DelayColorConverter x:Key="DelayColorConverter" />
+        <conv:ActiveServerBackgroundConverter x:Key="ActiveServerBackgroundConverter" />
+        <conv:ActiveServerFontWeightConverter x:Key="ActiveServerFontWeightConverter" />
+        <conv:ActiveServerBorderBrushConverter x:Key="ActiveServerBorderBrushConverter" />
+        <conv:ActiveServerBorderThicknessConverter x:Key="ActiveServerBorderThicknessConverter" />
 
         <ControlTheme x:Key="{x:Type DataGridColumnChooser}" TargetType="DataGridColumnChooser">
             <Setter Property="ItemTemplate">
@@ -173,6 +177,14 @@
                     <KeyBinding Command="{Binding Export2ShareUrlCmd}" Gesture="Ctrl+C" />
                     <KeyBinding Command="{Binding SetDefaultServerCmd}" Gesture="Enter" />
                 </DataGrid.KeyBindings>
+                <DataGrid.Styles>
+                    <Style Selector="DataGridRow">
+                        <Setter Property="Background" Value="{Binding IsActive, Converter={StaticResource ActiveServerBackgroundConverter}}" />
+                        <Setter Property="BorderBrush" Value="{Binding IsActive, Converter={StaticResource ActiveServerBorderBrushConverter}}" />
+                        <Setter Property="BorderThickness" Value="{Binding IsActive, Converter={StaticResource ActiveServerBorderThicknessConverter}}" />
+                        <Setter Property="FontWeight" Value="{Binding IsActive, Converter={StaticResource ActiveServerFontWeightConverter}}" />
+                    </Style>
+                </DataGrid.Styles>
                 <DataGrid.ContextMenu>
                     <ContextMenu>
                         <MenuItem
@@ -289,6 +301,7 @@
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
+                                        FontWeight="{Binding IsActive, Converter={StaticResource ActiveServerFontWeightConverter}}"
                                         Text="{Binding Remarks}" />
                                 </StackPanel>
                             </DataTemplate>
