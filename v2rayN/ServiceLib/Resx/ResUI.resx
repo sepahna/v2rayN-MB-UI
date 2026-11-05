@@ -492,6 +492,9 @@
   <data name="menuAddServerViaClipboard" xml:space="preserve">
     <value>Import Share Links from clipboard</value>
   </data>
+  <data name="menuImportSub" xml:space="preserve">
+    <value>Import Sub</value>
+  </data>
   <data name="menuAddServerViaScan" xml:space="preserve">
     <value>Scan QR code on the screen</value>
   </data>

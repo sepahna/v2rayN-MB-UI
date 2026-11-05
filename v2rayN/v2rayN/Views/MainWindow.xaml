@@ -52,8 +52,12 @@
                                         <materialDesign:PackIcon
                                             Margin="{StaticResource MarginRight8}"
                                             VerticalAlignment="Center"
-                                            Kind="Server" />
-                                        <TextBlock Text="{x:Static resx:ResUI.menuServers}" />
+                                            Kind="Plus" />
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static resx:ResUI.menuServers}" />
+                                        <materialDesign:PackIcon
+                                            Margin="{StaticResource MarginLeft8}"
+                                            VerticalAlignment="Center"
+                                            Kind="MenuDown" />
                                     </StackPanel>
                                 </MenuItem.Header>
                                 <MenuItem
@@ -61,6 +65,10 @@
                                     Height="{StaticResource MenuItemHeight}"
                                     Header="{x:Static resx:ResUI.menuAddServerViaClipboard}"
                                     InputGestureText="Ctrl+V" />
+                                <MenuItem
+                                    x:Name="menuImportSub"
+                                    Height="{StaticResource MenuItemHeight}"
+                                    Header="{x:Static resx:ResUI.menuImportSub}" />
                                 <MenuItem
                                     x:Name="menuAddServerViaScan"
                                     Height="{StaticResource MenuItemHeight}"
@@ -148,7 +156,11 @@
                                             Margin="{StaticResource MarginRight8}"
                                             VerticalAlignment="Center"
                                             Kind="BookClockOutline" />
-                                        <TextBlock Text="{x:Static resx:ResUI.menuSubscription}" />
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static resx:ResUI.menuSubscription}" />
+                                        <materialDesign:PackIcon
+                                            Margin="{StaticResource MarginLeft8}"
+                                            VerticalAlignment="Center"
+                                            Kind="MenuDown" />
                                     </StackPanel>
                                 </MenuItem.Header>
                                 <MenuItem
@@ -183,7 +195,11 @@
                                             Margin="{StaticResource MarginRight8}"
                                             VerticalAlignment="Center"
                                             Kind="SettingsOutline" />
-                                        <TextBlock Text="{x:Static resx:ResUI.menuSetting}" />
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static resx:ResUI.menuSetting}" />
+                                        <materialDesign:PackIcon
+                                            Margin="{StaticResource MarginLeft8}"
+                                            VerticalAlignment="Center"
+                                            Kind="MenuDown" />
                                     </StackPanel>
                                 </MenuItem.Header>
                                 <MenuItem
@@ -256,7 +272,11 @@
                                             Margin="{StaticResource MarginRight8}"
                                             VerticalAlignment="Center"
                                             Kind="HelpCircleOutline" />
-                                        <TextBlock Text="{x:Static resx:ResUI.menuHelp}" />
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static resx:ResUI.menuHelp}" />
+                                        <materialDesign:PackIcon
+                                            Margin="{StaticResource MarginLeft8}"
+                                            VerticalAlignment="Center"
+                                            Kind="MenuDown" />
                                     </StackPanel>
                                 </MenuItem.Header>
                                 <MenuItem x:Name="menuCheckUpdate" Header="{x:Static resx:ResUI.menuCheckUpdate}" />
@@ -292,7 +312,11 @@
                                             Margin="{StaticResource MarginRight8}"
                                             VerticalAlignment="Center"
                                             Kind="Web" />
-                                        <TextBlock Text="{x:Static resx:ResUI.menuPromotion}" />
+                                        <TextBlock VerticalAlignment="Center" Text="{x:Static resx:ResUI.menuPromotion}" />
+                                        <materialDesign:PackIcon
+                                            Margin="{StaticResource MarginLeft8}"
+                                            VerticalAlignment="Center"
+                                            Kind="MenuDown" />
                                     </StackPanel>
                                 </MenuItem.Header>
                                 <MenuItem

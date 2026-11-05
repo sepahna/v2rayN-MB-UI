@@ -851,6 +851,12 @@ namespace ServiceLib.Resx {
                 return ResourceManager.GetString("menuAddServerViaClipboard", resourceCulture);
             }
         }
+
+        public static string menuImportSub {
+            get {
+                return ResourceManager.GetString("menuImportSub", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 Scan QR code in the image 的本地化字符串。

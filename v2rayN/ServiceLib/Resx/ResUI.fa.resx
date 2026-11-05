@@ -489,6 +489,9 @@
   <data name="menuAddServerViaClipboard" xml:space="preserve">
     <value>وارد کردن URL انبوه از کلیپ بورد</value>
   </data>
+  <data name="menuImportSub" xml:space="preserve">
+    <value>وارد کردن اشتراک</value>
+  </data>
   <data name="menuAddServerViaScan" xml:space="preserve">
     <value>اسکن کد QR روی صفحه</value>
   </data>

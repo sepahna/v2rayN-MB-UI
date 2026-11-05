@@ -23,11 +23,19 @@
             <DockPanel Margin="{StaticResource Margin8}" DockPanel.Dock="Top">
                 <ContentControl x:Name="conTheme" DockPanel.Dock="Right" />
                 <Menu Margin="{StaticResource Margin4}">
-                    <MenuItem Header="{x:Static resx:ResUI.menuServers}">
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock FontWeight="Bold" Text="+" />
+                                <TextBlock Text="{x:Static resx:ResUI.menuServers}" />
+                                <TextBlock Opacity="0.7" Text="▾" />
+                            </StackPanel>
+                        </MenuItem.Header>
                         <MenuItem
                             x:Name="menuAddServerViaClipboard"
                             Header="{x:Static resx:ResUI.menuAddServerViaClipboard}"
                             InputGesture="Ctrl+V" />
+                        <MenuItem x:Name="menuImportSub" Header="{x:Static resx:ResUI.menuImportSub}" />
                         <MenuItem
                             x:Name="menuAddServerViaScan"
                             Header="{x:Static resx:ResUI.menuAddServerViaScan}"
@@ -54,7 +62,13 @@
                         <MenuItem x:Name="menuAddNaiveServer" Header="{x:Static resx:ResUI.menuAddNaiveServer}" />
                     </MenuItem>
 
-                    <MenuItem Header="{x:Static resx:ResUI.menuSubscription}">
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{x:Static resx:ResUI.menuSubscription}" />
+                                <TextBlock Opacity="0.7" Text="▾" />
+                            </StackPanel>
+                        </MenuItem.Header>
                         <MenuItem x:Name="menuSubSetting" Header="{x:Static resx:ResUI.menuSubSetting}" />
                         <Separator />
                         <MenuItem x:Name="menuSubUpdate" Header="{x:Static resx:ResUI.menuSubUpdate}" />
@@ -63,7 +77,13 @@
                         <MenuItem x:Name="menuSubGroupUpdateViaProxy" Header="{x:Static resx:ResUI.menuSubGroupUpdateViaProxy}" />
                     </MenuItem>
 
-                    <MenuItem Header="{x:Static resx:ResUI.menuSetting}">
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{x:Static resx:ResUI.menuSetting}" />
+                                <TextBlock Opacity="0.7" Text="▾" />
+                            </StackPanel>
+                        </MenuItem.Header>
                         <MenuItem x:Name="menuOptionSetting" Header="{x:Static resx:ResUI.menuOptionSetting}" />
                         <MenuItem x:Name="menuRoutingSetting" Header="{x:Static resx:ResUI.menuRoutingSetting}" />
                         <MenuItem x:Name="menuDNSSetting" Header="{x:Static resx:ResUI.menuDNSSetting}" />
@@ -92,14 +112,26 @@
                         <MenuItem x:Name="menuOpenTheFileLocation" Header="{x:Static resx:ResUI.menuOpenTheFileLocation}" />
                     </MenuItem>
 
-                    <MenuItem x:Name="menuHelp" Header="{x:Static resx:ResUI.menuHelp}">
+                    <MenuItem x:Name="menuHelp">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{x:Static resx:ResUI.menuHelp}" />
+                                <TextBlock Opacity="0.7" Text="▾" />
+                            </StackPanel>
+                        </MenuItem.Header>
                         <MenuItem x:Name="menuCheckUpdate" Header="{x:Static resx:ResUI.menuCheckUpdate}" />
                         <Separator />
                     </MenuItem>
 
                     <MenuItem x:Name="menuReload" Header="{x:Static resx:ResUI.menuReload}" />
 
-                    <MenuItem x:Name="menuPromotion" Header="{x:Static resx:ResUI.menuPromotion}">
+                    <MenuItem x:Name="menuPromotion">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <TextBlock Text="{x:Static resx:ResUI.menuPromotion}" />
+                                <TextBlock Opacity="0.7" Text="▾" />
+                            </StackPanel>
+                        </MenuItem.Header>
                         <MenuItem x:Name="menuSiteHome" Header="{x:Static resx:ResUI.menuSiteHome}" />
                         <MenuItem x:Name="menuSiteBuy" Header="{x:Static resx:ResUI.menuSiteBuy}" />
                         <MenuItem x:Name="menuSiteChannel" Header="{x:Static resx:ResUI.menuSiteChannel}" />

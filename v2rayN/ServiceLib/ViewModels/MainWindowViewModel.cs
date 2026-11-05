@@ -42,6 +42,8 @@ public partial class MainWindowViewModel : MyReactiveObject
     public ReactiveCommand<RxVoid, RxVoid> AddServerViaImageCmd { get; }
 
     //Subscription
+    public ReactiveCommand<RxVoid, RxVoid> ImportSubCmd { get; }
+
     public ReactiveCommand<RxVoid, RxVoid> SubSettingCmd { get; }
 
     public ReactiveCommand<RxVoid, RxVoid> SubUpdateCmd { get; }
@@ -175,6 +177,10 @@ public partial class MainWindowViewModel : MyReactiveObject
         });
 
         //Subscription
+        ImportSubCmd = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await ProfilesViewModel.AddSubscriptionAsync();
+        });
         SubSettingCmd = ReactiveCommand.CreateFromTask(async () =>
         {
             await SubSettingAsync();

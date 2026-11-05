@@ -229,7 +229,7 @@ public partial class ProfilesViewModel : MyReactiveObject
         //Subscription
         AddSubCmd = ReactiveCommand.CreateFromTask(async () =>
         {
-            await EditSubAsync(true);
+            await AddSubscriptionAsync();
         });
         EditSubCmd = ReactiveCommand.CreateFromTask(async () =>
         {
@@ -914,6 +914,8 @@ public partial class ProfilesViewModel : MyReactiveObject
     #endregion Add Servers
 
     #region Subscription
+
+    public Task AddSubscriptionAsync() => EditSubAsync(true);
 
     private async Task EditSubAsync(bool blNew)
     {
