@@ -24,7 +24,11 @@ public partial class MainWindow
         Closing += MainWindow_Closing;
         PreviewKeyDown += MainWindow_PreviewKeyDown;
         menuSettingsSetUWP.Click += MenuSettingsSetUWP_Click;
-        menuPromotion.Click += MenuPromotion_Click;
+        menuSiteHome.Click += (_, _) => OpenBaraniUrl(Global.SiteUrl);
+        menuSiteBuy.Click += (_, _) => OpenBaraniUrl(Global.SitePlansUrl);
+        menuSiteChannel.Click += (_, _) => OpenBaraniUrl(Global.SiteChannelUrl);
+        menuSiteVideo.Click += (_, _) => OpenBaraniUrl(Global.SiteVideoUrl);
+        menuSiteTicket.Click += (_, _) => OpenBaraniUrl(Global.SiteTicketsUrl);
         menuClose.Click += MenuClose_Click;
         menuCheckUpdate.Click += MenuCheckUpdate_Click;
         btnNewUpdate.Click += MenuCheckUpdate_Click;
@@ -244,9 +248,9 @@ public partial class MainWindow
         ShowHideWindow(false);
     }
 
-    private void MenuPromotion_Click(object sender, RoutedEventArgs e)
+    private static void OpenBaraniUrl(string url)
     {
-        ProcUtils.ProcessStart($"{Utils.Base64Decode(Global.PromotionUrl)}?t={DateTime.Now.Ticks}");
+        ProcUtils.ProcessStart(url);
     }
 
     private void MenuSettingsSetUWP_Click(object sender, RoutedEventArgs e)

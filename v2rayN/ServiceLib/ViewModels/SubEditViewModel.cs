@@ -90,6 +90,10 @@ public partial class SubEditViewModel : MyReactiveObject, ICloseable
         if (await ConfigHandler.AddSubItem(_config, SelectedSource) == 0)
         {
             NoticeManager.Instance.Enqueue(ResUI.OperationSuccess);
+            if (SelectedSource.Id.IsNotEmpty() && SelectedSource.Url.IsNotEmpty())
+            {
+                AppEvents.SubscriptionFetchRequested.Publish(SelectedSource.Id);
+            }
             RequestClose?.Invoke(this, EventArgs.Empty);
         }
         else

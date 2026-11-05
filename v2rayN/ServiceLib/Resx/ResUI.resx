@@ -421,7 +421,22 @@
     <value>Option Setting</value>
   </data>
   <data name="menuPromotion" xml:space="preserve">
-    <value>Promotion</value>
+    <value>Barani</value>
+  </data>
+  <data name="menuSiteHome" xml:space="preserve">
+    <value>Website</value>
+  </data>
+  <data name="menuSiteBuy" xml:space="preserve">
+    <value>Buy</value>
+  </data>
+  <data name="menuSiteChannel" xml:space="preserve">
+    <value>Channel</value>
+  </data>
+  <data name="menuSiteVideo" xml:space="preserve">
+    <value>Videos</value>
+  </data>
+  <data name="menuSiteTicket" xml:space="preserve">
+    <value>Tickets</value>
   </data>
   <data name="menuReload" xml:space="preserve">
     <value>Reload</value>

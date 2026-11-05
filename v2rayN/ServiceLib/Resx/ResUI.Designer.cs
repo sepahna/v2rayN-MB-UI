@@ -1463,6 +1463,36 @@ namespace ServiceLib.Resx {
                 return ResourceManager.GetString("menuPromotion", resourceCulture);
             }
         }
+
+        public static string menuSiteHome {
+            get {
+                return ResourceManager.GetString("menuSiteHome", resourceCulture);
+            }
+        }
+
+        public static string menuSiteBuy {
+            get {
+                return ResourceManager.GetString("menuSiteBuy", resourceCulture);
+            }
+        }
+
+        public static string menuSiteChannel {
+            get {
+                return ResourceManager.GetString("menuSiteChannel", resourceCulture);
+            }
+        }
+
+        public static string menuSiteVideo {
+            get {
+                return ResourceManager.GetString("menuSiteVideo", resourceCulture);
+            }
+        }
+
+        public static string menuSiteTicket {
+            get {
+                return ResourceManager.GetString("menuSiteTicket", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 Part Node Latency Test 的本地化字符串。

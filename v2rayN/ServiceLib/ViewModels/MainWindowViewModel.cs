@@ -269,6 +269,21 @@ public partial class MainWindowViewModel : MyReactiveObject
             .ObserveOn(RxSchedulers.MainThreadScheduler)
             .Subscribe(bl => BlNewUpdate = bl);
 
+        AppEvents.SubscriptionFetchRequested
+            .AsObservable()
+            .ObserveOn(RxSchedulers.MainThreadScheduler)
+            .SubscribeAsync(async subId =>
+            {
+                if (subId.IsNullOrEmpty())
+                {
+                    return;
+                }
+
+                _config.SubIndexId = subId;
+                await RefreshSubscriptions();
+                await UpdateSubscriptionProcess(subId, false);
+            });
+
         #endregion AppEvents
 
         ProfilesViewModel.RefreshServersRequested

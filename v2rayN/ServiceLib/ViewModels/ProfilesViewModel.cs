@@ -19,6 +19,8 @@ public partial class ProfilesViewModel : MyReactiveObject
     private readonly Dictionary<string, bool> _dicHeaderSort = new();
     private SpeedtestService? _speedtestService;
     private string? _pendingSelectIndexId;
+    private DateTime _lastAutoTcpingUtc = DateTime.MinValue;
+    private static readonly TimeSpan AutoTcpingCooldown = TimeSpan.FromSeconds(30);
 
     #endregion private prop
 
@@ -373,9 +375,36 @@ public partial class ProfilesViewModel : MyReactiveObject
             }
             selected ??= lstModel.FirstOrDefault(t => t.IndexId == _config.IndexId);
             SelectedProfile = selected ?? lstModel.First();
+            await MaybeAutoTcpingAsync();
         }
 
         await DispatcherRefreshServersBizInteraction.HandleSafe(RxVoid.Default);
+    }
+
+    private async Task MaybeAutoTcpingAsync()
+    {
+        if (DateTime.UtcNow - _lastAutoTcpingUtc < AutoTcpingCooldown)
+        {
+            return;
+        }
+
+        var lstSelected = JsonUtils.Deserialize<List<ProfileItem>>(JsonUtils.Serialize(ProfileItems.OrderBy(t => t.Sort).ToList()));
+        if (lstSelected is null || lstSelected.Count <= 0)
+        {
+            return;
+        }
+
+        _lastAutoTcpingUtc = DateTime.UtcNow;
+        _speedtestService ??= new SpeedtestService(_config, async (SpeedTestResult result) =>
+        {
+            RxSchedulers.MainThreadScheduler.Schedule(() =>
+            {
+                _ = SetSpeedTestResult(result);
+            });
+            await Task.CompletedTask;
+        });
+        _speedtestService.RunLoop(ESpeedActionType.Tcping, lstSelected);
+        await Task.CompletedTask;
     }
 
     public async Task RefreshSubscriptions()
@@ -904,6 +933,10 @@ public partial class ProfilesViewModel : MyReactiveObject
         var subEditViewModel = new SubEditViewModel(item);
         if (await AppManager.Instance.WindowDialog.ShowDialogAsync(subEditViewModel) == true)
         {
+            if (subEditViewModel.SelectedSource.Id.IsNotEmpty())
+            {
+                _config.SubIndexId = subEditViewModel.SelectedSource.Id;
+            }
             await RefreshSubscriptions();
             await SubSelectedChangedAsync();
         }

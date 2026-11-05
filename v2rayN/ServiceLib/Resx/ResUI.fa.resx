@@ -418,7 +418,22 @@
     <value>تنظیمات پارامتر</value>
   </data>
   <data name="menuPromotion" xml:space="preserve">
-    <value>ترفیع</value>
+    <value>بارانی</value>
+  </data>
+  <data name="menuSiteHome" xml:space="preserve">
+    <value>سایت</value>
+  </data>
+  <data name="menuSiteBuy" xml:space="preserve">
+    <value>خرید</value>
+  </data>
+  <data name="menuSiteChannel" xml:space="preserve">
+    <value>کانال</value>
+  </data>
+  <data name="menuSiteVideo" xml:space="preserve">
+    <value>ویدیو</value>
+  </data>
+  <data name="menuSiteTicket" xml:space="preserve">
+    <value>تیکت</value>
   </data>
   <data name="menuReload" xml:space="preserve">
     <value>بارگذاری مجدد</value>

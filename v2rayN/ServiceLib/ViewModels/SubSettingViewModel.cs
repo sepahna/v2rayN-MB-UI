@@ -76,6 +76,10 @@ public partial class SubSettingViewModel : MyReactiveObject
         var subEditViewModel = new SubEditViewModel(item);
         if (await AppManager.Instance.WindowDialog.ShowDialogAsync(subEditViewModel) == true)
         {
+            if (subEditViewModel.SelectedSource.Id.IsNotEmpty())
+            {
+                _config.SubIndexId = subEditViewModel.SelectedSource.Id;
+            }
             await RefreshSubItems();
             IsModified = true;
         }

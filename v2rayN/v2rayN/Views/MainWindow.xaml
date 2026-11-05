@@ -10,7 +10,7 @@
     xmlns:resx="clr-namespace:ServiceLib.Resx;assembly=ServiceLib"
     xmlns:view="clr-namespace:v2rayN.Views"
     xmlns:vms="clr-namespace:ServiceLib.ViewModels;assembly=ServiceLib"
-    Title="v2rayN"
+    Title="Barani Core"
     Width="1200"
     Height="800"
     MinWidth="800"
@@ -291,10 +291,30 @@
                                         <materialDesign:PackIcon
                                             Margin="{StaticResource MarginRight8}"
                                             VerticalAlignment="Center"
-                                            Kind="VolumeHigh" />
+                                            Kind="Web" />
                                         <TextBlock Text="{x:Static resx:ResUI.menuPromotion}" />
                                     </StackPanel>
                                 </MenuItem.Header>
+                                <MenuItem
+                                    x:Name="menuSiteHome"
+                                    Height="{StaticResource MenuItemHeight}"
+                                    Header="{x:Static resx:ResUI.menuSiteHome}" />
+                                <MenuItem
+                                    x:Name="menuSiteBuy"
+                                    Height="{StaticResource MenuItemHeight}"
+                                    Header="{x:Static resx:ResUI.menuSiteBuy}" />
+                                <MenuItem
+                                    x:Name="menuSiteChannel"
+                                    Height="{StaticResource MenuItemHeight}"
+                                    Header="{x:Static resx:ResUI.menuSiteChannel}" />
+                                <MenuItem
+                                    x:Name="menuSiteVideo"
+                                    Height="{StaticResource MenuItemHeight}"
+                                    Header="{x:Static resx:ResUI.menuSiteVideo}" />
+                                <MenuItem
+                                    x:Name="menuSiteTicket"
+                                    Height="{StaticResource MenuItemHeight}"
+                                    Header="{x:Static resx:ResUI.menuSiteTicket}" />
                             </MenuItem>
                         </Menu>
                         <Separator />

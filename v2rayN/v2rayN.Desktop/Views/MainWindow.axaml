@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:resx="clr-namespace:ServiceLib.Resx;assembly=ServiceLib"
     xmlns:vms="clr-namespace:ServiceLib.ViewModels;assembly=ServiceLib"
-    Title="v2rayN"
+    Title="Barani Core"
     Width="1200"
     Height="800"
     MinWidth="600"
@@ -99,7 +99,13 @@
 
                     <MenuItem x:Name="menuReload" Header="{x:Static resx:ResUI.menuReload}" />
 
-                    <MenuItem x:Name="menuPromotion" Header="{x:Static resx:ResUI.menuPromotion}" />
+                    <MenuItem x:Name="menuPromotion" Header="{x:Static resx:ResUI.menuPromotion}">
+                        <MenuItem x:Name="menuSiteHome" Header="{x:Static resx:ResUI.menuSiteHome}" />
+                        <MenuItem x:Name="menuSiteBuy" Header="{x:Static resx:ResUI.menuSiteBuy}" />
+                        <MenuItem x:Name="menuSiteChannel" Header="{x:Static resx:ResUI.menuSiteChannel}" />
+                        <MenuItem x:Name="menuSiteVideo" Header="{x:Static resx:ResUI.menuSiteVideo}" />
+                        <MenuItem x:Name="menuSiteTicket" Header="{x:Static resx:ResUI.menuSiteTicket}" />
+                    </MenuItem>
 
                     <MenuItem x:Name="menuClose" Header="{x:Static resx:ResUI.menuExit}" />
                 </Menu>
