@@ -29,6 +29,9 @@ public partial class MainWindow
         menuSiteChannel.Click += (_, _) => OpenBaraniUrl(Global.SiteChannelUrl);
         menuSiteVideo.Click += (_, _) => OpenBaraniUrl(Global.SiteVideoUrl);
         menuSiteTicket.Click += (_, _) => OpenBaraniUrl(Global.SiteTicketsUrl);
+        btnSiteBuy.Click += (_, _) => OpenBaraniUrl(Global.SitePlansUrl);
+        btnSiteChannel.Click += (_, _) => OpenBaraniUrl(Global.SiteChannelUrl);
+        btnSiteVideo.Click += (_, _) => OpenBaraniUrl(Global.SiteVideoUrl);
         menuClose.Click += MenuClose_Click;
         menuCheckUpdate.Click += MenuCheckUpdate_Click;
         btnNewUpdate.Click += MenuCheckUpdate_Click;
@@ -311,6 +314,8 @@ public partial class MainWindow
             {
                 WindowState = WindowState.Normal;
             }
+
+            EnsureWindowOnScreen(applySavedSize: false);
             this?.Activate();
             this?.Focus();
         }

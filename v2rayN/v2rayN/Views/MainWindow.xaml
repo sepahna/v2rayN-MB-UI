@@ -341,6 +341,36 @@
                                     Header="{x:Static resx:ResUI.menuSiteTicket}" />
                             </MenuItem>
                         </Menu>
+                        <Button
+                            x:Name="btnSiteBuy"
+                            Width="36"
+                            Height="36"
+                            Margin="{StaticResource MarginLeftRight4}"
+                            Padding="0"
+                            ToolTip="{x:Static resx:ResUI.menuSiteBuy}"
+                            Style="{StaticResource MaterialDesignIconForegroundButton}">
+                            <materialDesign:PackIcon Kind="CartOutline" />
+                        </Button>
+                        <Button
+                            x:Name="btnSiteChannel"
+                            Width="36"
+                            Height="36"
+                            Margin="{StaticResource MarginLeftRight4}"
+                            Padding="0"
+                            ToolTip="{x:Static resx:ResUI.menuSiteChannel}"
+                            Style="{StaticResource MaterialDesignIconForegroundButton}">
+                            <materialDesign:PackIcon Kind="Broadcast" />
+                        </Button>
+                        <Button
+                            x:Name="btnSiteVideo"
+                            Width="36"
+                            Height="36"
+                            Margin="{StaticResource MarginLeftRight4}"
+                            Padding="0"
+                            ToolTip="{x:Static resx:ResUI.menuSiteVideo}"
+                            Style="{StaticResource MaterialDesignIconForegroundButton}">
+                            <materialDesign:PackIcon Kind="PlayCircleOutline" />
+                        </Button>
                         <Separator />
                         <Menu Margin="0,1" Style="{StaticResource ToolbarMenu}">
                             <MenuItem

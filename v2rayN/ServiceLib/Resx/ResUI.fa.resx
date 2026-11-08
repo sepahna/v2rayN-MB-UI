@@ -516,6 +516,12 @@
   <data name="menuSortServerResult" xml:space="preserve">
     <value>مرتب سازی بر اساس نتیجه تست</value>
   </data>
+  <data name="menuSortServerByName" xml:space="preserve">
+    <value>مرتب‌سازی بر اساس نام</value>
+  </data>
+  <data name="MsgCannotDeleteFreeSubscription" xml:space="preserve">
+    <value>گروه رایگان داخلی است و حذف نمی‌شود</value>
+  </data>
   <data name="menuSpeedServer" xml:space="preserve">
     <value>تست سرعت دانلود سرورها</value>
   </data>

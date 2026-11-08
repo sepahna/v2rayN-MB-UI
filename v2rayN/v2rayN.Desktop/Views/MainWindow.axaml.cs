@@ -352,6 +352,8 @@ public partial class MainWindow : WindowBase<MainWindowViewModel>
             {
                 WindowState = WindowState.Normal;
             }
+
+            EnsureWindowOnScreen(applySavedSize: false);
             Activate();
             Focus();
         }

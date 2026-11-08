@@ -14,27 +14,52 @@ public class WindowBase<TViewModel> : ReactiveWindow<TViewModel> where TViewMode
         };
     }
 
-    private void ReactiveWindowBase_Closed(object? sender, EventArgs e)
+    protected virtual void OnLoaded(object? sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        EnsureWindowOnScreen(applySavedSize: true);
     }
 
-    protected virtual void OnLoaded(object? sender, RoutedEventArgs e)
+    /// <summary>
+    /// Keeps the title bar on the visible work area across monitors and DPI scales.
+    /// </summary>
+    protected void EnsureWindowOnScreen(bool applySavedSize)
     {
         try
         {
-            var sizeItem = ConfigHandler.GetWindowSizeItem(AppManager.Instance.Config, GetType().Name);
-            if (sizeItem is null)
+            if (WindowState != WindowState.Normal)
             {
                 return;
             }
 
             var screen = Screens.ScreenFromWindow(this) ?? Screens.Primary;
+            if (screen is null)
+            {
+                return;
+            }
+
             var scaling = screen.Scaling > 0 ? screen.Scaling : 1.0;
             var workingArea = screen.WorkingArea;
+            const double margin = 8;
+            var maxWidth = Math.Max(320, (workingArea.Width / scaling) - (margin * 2));
+            var maxHeight = Math.Max(240, (workingArea.Height / scaling) - (margin * 2));
 
-            var width = Math.Min(sizeItem.Width, workingArea.Width / scaling);
-            var height = Math.Min(sizeItem.Height, workingArea.Height / scaling);
+            double width = Width;
+            double height = Height;
+
+            if (applySavedSize)
+            {
+                var sizeItem = ConfigHandler.GetWindowSizeItem(AppManager.Instance.Config, GetType().Name);
+                if (sizeItem is not null)
+                {
+                    width = Math.Min(sizeItem.Width, maxWidth);
+                    height = Math.Min(sizeItem.Height, maxHeight);
+                }
+            }
+            else
+            {
+                width = Math.Min(width, maxWidth);
+                height = Math.Min(height, maxHeight);
+            }
 
             Width = width;
             Height = height;
@@ -45,9 +70,38 @@ public class WindowBase<TViewModel> : ReactiveWindow<TViewModel> where TViewMode
 
             var x = workingArea.X + ((workingArea.Width - totalWidth) / 2);
             var y = workingArea.Y + ((workingArea.Height - totalHeight) / 2);
-            Position = new PixelPoint((int)x, (int)y);
+
+            if (x < workingArea.X + margin)
+            {
+                x = workingArea.X + margin;
+            }
+
+            if (y < workingArea.Y + margin)
+            {
+                y = workingArea.Y + margin;
+            }
+
+            if (x + totalWidth > workingArea.X + workingArea.Width - margin)
+            {
+                x = Math.Max(workingArea.X + margin, workingArea.X + workingArea.Width - totalWidth - margin);
+            }
+
+            if (y + totalHeight > workingArea.Y + workingArea.Height - margin)
+            {
+                y = Math.Max(workingArea.Y + margin, workingArea.Y + workingArea.Height - totalHeight - margin);
+            }
+
+            if (y < workingArea.Y + margin)
+            {
+                y = workingArea.Y + margin;
+            }
+
+            Position = new PixelPoint((int)Math.Round(x), (int)Math.Round(y));
         }
-        catch { }
+        catch
+        {
+            // Ignore layout failures during early window creation.
+        }
     }
 
     protected override void OnClosed(EventArgs e)
@@ -55,7 +109,10 @@ public class WindowBase<TViewModel> : ReactiveWindow<TViewModel> where TViewMode
         base.OnClosed(e);
         try
         {
-            ConfigHandler.SaveWindowSizeItem(AppManager.Instance.Config, GetType().Name, Width, Height);
+            if (WindowState == WindowState.Normal)
+            {
+                ConfigHandler.SaveWindowSizeItem(AppManager.Instance.Config, GetType().Name, Width, Height);
+            }
         }
         catch { }
     }

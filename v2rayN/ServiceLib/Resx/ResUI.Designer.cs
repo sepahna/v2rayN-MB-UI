@@ -1859,6 +1859,18 @@ namespace ServiceLib.Resx {
                 return ResourceManager.GetString("menuSortServerResult", resourceCulture);
             }
         }
+
+        public static string menuSortServerByName {
+            get {
+                return ResourceManager.GetString("menuSortServerByName", resourceCulture);
+            }
+        }
+
+        public static string MsgCannotDeleteFreeSubscription {
+            get {
+                return ResourceManager.GetString("MsgCannotDeleteFreeSubscription", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 Test download speed 的本地化字符串。

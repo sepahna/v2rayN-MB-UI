@@ -46,6 +46,11 @@ public partial class SubEditViewModel : MyReactiveObject, ICloseable
         });
 
         SelectedSource = subItem.Id.IsNullOrEmpty() ? subItem : JsonUtils.DeepCopy(subItem);
+        if (FreeSubscription.IsFree(SelectedSource.Id))
+        {
+            FreeSubscription.Pin(SelectedSource);
+        }
+
         CustomCoreType = SelectedSource.CustomCoreType?.ToString() ?? string.Empty;
         PrevProfile = SelectedSource.PrevProfile;
         NextProfile = SelectedSource.NextProfile;
@@ -53,6 +58,11 @@ public partial class SubEditViewModel : MyReactiveObject, ICloseable
 
     private async Task SaveSubAsync()
     {
+        if (FreeSubscription.IsFree(SelectedSource.Id))
+        {
+            FreeSubscription.Pin(SelectedSource);
+        }
+
         var remarks = SelectedSource.Remarks;
         if (remarks.IsNullOrEmpty())
         {

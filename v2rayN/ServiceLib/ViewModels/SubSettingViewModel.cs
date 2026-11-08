@@ -94,6 +94,12 @@ public partial class SubSettingViewModel : MyReactiveObject
 
         foreach (var it in SelectedSources ?? [SelectedSource])
         {
+            if (FreeSubscription.IsFree(it.Id))
+            {
+                NoticeManager.Instance.Enqueue(ResUI.MsgCannotDeleteFreeSubscription);
+                continue;
+            }
+
             await ConfigHandler.DeleteSubItem(_config, it.Id);
         }
         await RefreshSubItems();

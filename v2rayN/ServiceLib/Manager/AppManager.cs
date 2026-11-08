@@ -92,6 +92,16 @@ public sealed class AppManager
 #pragma warning disable CS0618
         SQLiteHelper.Instance.CreateTable<ProfileGroupItem>();
 #pragma warning restore CS0618
+
+        try
+        {
+            FreeSubscription.EnsureAsync().GetAwaiter().GetResult();
+        }
+        catch (Exception ex)
+        {
+            Logging.SaveLog("EnsureFreeSubscription", ex);
+        }
+
         return true;
     }
 

@@ -2294,6 +2294,11 @@ public static class ConfigHandler
     /// <returns>0 if successful, -1 if failed</returns>
     public static async Task<int> AddSubItem(Config config, SubItem subItem)
     {
+        if (FreeSubscription.IsFree(subItem.Id))
+        {
+            FreeSubscription.Pin(subItem);
+        }
+
         var item = await AppManager.Instance.GetSubItem(subItem.Id);
         if (item is null)
         {
@@ -2318,6 +2323,11 @@ public static class ConfigHandler
             item.Memo = subItem.Memo;
             item.CustomCoreType = subItem.CustomCoreType;
             item.PreResolver = subItem.PreResolver;
+        }
+
+        if (FreeSubscription.IsFree(item.Id))
+        {
+            FreeSubscription.Pin(item);
         }
 
         if (item.Id.IsNullOrEmpty())
@@ -2383,6 +2393,11 @@ public static class ConfigHandler
     /// <returns>0 if successful</returns>
     public static async Task<int> DeleteSubItem(Config config, string id)
     {
+        if (FreeSubscription.IsFree(id))
+        {
+            return -1;
+        }
+
         var item = await AppManager.Instance.GetSubItem(id);
         if (item is null)
         {

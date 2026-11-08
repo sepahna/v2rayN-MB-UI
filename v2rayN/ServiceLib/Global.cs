@@ -13,6 +13,9 @@ public class Global
     public const string SiteChannelUrl = SiteUrl + "/channel/";
     public const string SiteVideoUrl = SiteUrl + "/video";
     public const string SiteTicketsUrl = SiteUrl + "/tickets";
+    /// <summary>Built-in Free group address, same feed as the Android client.</summary>
+    public const string FreeSubscriptionId = "__free_subscription__";
+    public const string FreeSubscriptionUrl = SiteUrl + "/sub/free";
     public const string AppRepoPath = "sepahna/v2rayn-MB";
     // Base64 of https://mbarani.ir — kept for callers that still decode PromotionUrl.
     public const string PromotionUrl = @"aHR0cHM6Ly9tYmFyYW5pLmly";

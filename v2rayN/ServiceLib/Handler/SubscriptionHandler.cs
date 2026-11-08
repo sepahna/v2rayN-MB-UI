@@ -196,6 +196,14 @@ public static class SubscriptionHandler
 
     private static async Task<bool> ProcessDownloadResult(Config config, string id, string result, string hashCode, Func<bool, string, Task> updateFunc)
     {
+        if (FreeSubscription.IsFree(id) && FreeSubscription.IsExplicitlyEmptyFeed(result))
+        {
+            await ConfigHandler.RemoveServersViaSubid(config, id, false);
+            await updateFunc?.Invoke(false, $"{hashCode}{ResUI.MsgGetSubscriptionSuccessfully}");
+            await updateFunc?.Invoke(false, $"{hashCode}{ResUI.MsgUpdateSubscriptionEnd}");
+            return true;
+        }
+
         if (result.IsNullOrEmpty())
         {
             await updateFunc?.Invoke(false, $"{hashCode}{ResUI.MsgSubscriptionDecodingFailed}");

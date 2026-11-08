@@ -172,6 +172,10 @@
                             x:Name="menuSortServerResult"
                             Height="{StaticResource MenuItemHeight}"
                             Header="{x:Static resx:ResUI.menuSortServerResult}" />
+                        <MenuItem
+                            x:Name="menuSortServerByName"
+                            Height="{StaticResource MenuItemHeight}"
+                            Header="{x:Static resx:ResUI.menuSortServerByName}" />
                         <Separator />
                         <MenuItem
                             x:Name="menuMoveToGroup"

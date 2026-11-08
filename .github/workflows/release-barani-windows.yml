@@ -1,0 +1,59 @@
+name: release Barani Windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: Release tag (for example 1.0.0)
+        required: true
+        type: string
+        default: "1.0.0"
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      target: windows
+      project: ./v2rayN/v2rayN.csproj
+
+  package-and-release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download x64 build
+        uses: actions/download-artifact@v8
+        with:
+          name: x64
+          path: v2rayN-windows-64
+
+      - name: Fetch core binaries
+        run: |
+          set -euo pipefail
+          wget -nv -O core.zip "https://github.com/2dust/v2rayN-core-bin/raw/refs/heads/master/v2rayN-windows-64.zip"
+          7z x core.zip -y
+
+      - name: Create release zip
+        run: |
+          set -euo pipefail
+          7z a -tZip "v2rayN-windows-64.zip" "v2rayN-windows-64" -mx5
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ inputs.release_tag }}
+          name: Barani Core ${{ inputs.release_tag }}
+          body: |
+            نسخه ویندوز Barani Core بر پایه v2rayN
+
+            فایل پیشنهادی برای بیشتر سیستم‌ها:
+            - `v2rayN-windows-64.zip`
+
+            بعد از دانلود، زیپ را باز کنید و `v2rayN.exe` را اجرا کنید.
+          files: v2rayN-windows-64.zip
+          draft: false
+          prerelease: false
+          generate_release_notes: true

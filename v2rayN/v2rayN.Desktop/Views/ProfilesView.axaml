@@ -218,6 +218,7 @@
                             InputGesture="Ctrl+T" />
                         <MenuItem x:Name="menuUdpTestServer" Header="{x:Static resx:ResUI.menuUdpTestServer}" />
                         <MenuItem x:Name="menuSortServerResult" Header="{x:Static resx:ResUI.menuSortServerResult}" />
+                        <MenuItem x:Name="menuSortServerByName" Header="{x:Static resx:ResUI.menuSortServerByName}" />
                         <Separator />
                         <MenuItem
                             x:Name="menuMoveToGroup"

@@ -75,6 +75,7 @@ public partial class ProfilesViewModel : MyReactiveObject
     public ReactiveCommand<RxVoid, RxVoid> UdpTestServerCmd { get; }
     public ReactiveCommand<RxVoid, RxVoid> SpeedServerCmd { get; }
     public ReactiveCommand<RxVoid, RxVoid> SortServerResultCmd { get; }
+    public ReactiveCommand<RxVoid, RxVoid> SortServerByNameCmd { get; }
     public ReactiveCommand<RxVoid, RxVoid> RemoveInvalidServerResultCmd { get; }
     public ReactiveCommand<RxVoid, RxVoid> FastRealPingCmd { get; }
 
@@ -199,6 +200,10 @@ public partial class ProfilesViewModel : MyReactiveObject
         SortServerResultCmd = ReactiveCommand.CreateFromTask(async () =>
         {
             await SortServer(nameof(EServerColName.DelayVal));
+        });
+        SortServerByNameCmd = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await SortServer(nameof(EServerColName.Remarks));
         });
         RemoveInvalidServerResultCmd = ReactiveCommand.CreateFromTask(async () =>
         {

@@ -519,6 +519,12 @@
   <data name="menuSortServerResult" xml:space="preserve">
     <value>Sort by test result</value>
   </data>
+  <data name="menuSortServerByName" xml:space="preserve">
+    <value>Sort by name</value>
+  </data>
+  <data name="MsgCannotDeleteFreeSubscription" xml:space="preserve">
+    <value>The Free group is built-in and cannot be deleted</value>
+  </data>
   <data name="menuSpeedServer" xml:space="preserve">
     <value>Test download speed</value>
   </data>
