@@ -7,6 +7,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:dd="clr-namespace:v2rayN.Desktop.DesignData"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:dto="clr-namespace:ServiceLib.Models.Dto;assembly=ServiceLib"
     xmlns:resx="clr-namespace:ServiceLib.Resx;assembly=ServiceLib"
     xmlns:vms="clr-namespace:ServiceLib.ViewModels;assembly=ServiceLib"
     x:Name="Root"
@@ -180,7 +181,7 @@
                     <KeyBinding Command="{Binding SetDefaultServerCmd}" Gesture="Enter" />
                 </DataGrid.KeyBindings>
                 <DataGrid.Styles>
-                    <Style Selector="DataGridRow">
+                    <Style Selector="DataGridRow" x:DataType="dto:ProfileItemModel">
                         <Setter Property="Background" Value="{Binding IsActive, Converter={StaticResource ActiveServerBackgroundConverter}}" />
                         <Setter Property="BorderBrush" Value="{Binding IsActive, Converter={StaticResource ActiveServerBorderBrushConverter}}" />
                         <Setter Property="BorderThickness" Value="{Binding IsActive, Converter={StaticResource ActiveServerBorderThicknessConverter}}" />
