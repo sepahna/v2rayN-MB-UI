@@ -355,7 +355,11 @@ public partial class MainWindow
 
     private void StorageUI()
     {
-        ConfigHandler.SaveWindowSizeItem(_config, GetType().Name, Width, Height);
+        if (WindowState == WindowState.Normal)
+        {
+            EnsureWindowOnScreen(applySavedSize: false);
+            ConfigHandler.SaveWindowSizeItem(_config, GetType().Name, Width, Height);
+        }
 
         if (_config.UiItem.MainGirdOrientation == EGirdOrientation.Horizontal)
         {

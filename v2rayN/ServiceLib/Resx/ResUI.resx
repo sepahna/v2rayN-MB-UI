@@ -525,6 +525,12 @@
   <data name="MsgCannotDeleteFreeSubscription" xml:space="preserve">
     <value>The Free group is built-in and cannot be deleted</value>
   </data>
+  <data name="FreeGroupEmptyTitle" xml:space="preserve">
+    <value>Coming soon</value>
+  </data>
+  <data name="FreeGroupEmptyMessage" xml:space="preserve">
+    <value>Visit the website to purchase a plan.</value>
+  </data>
   <data name="menuSpeedServer" xml:space="preserve">
     <value>Test download speed</value>
   </data>

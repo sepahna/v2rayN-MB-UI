@@ -522,6 +522,12 @@
   <data name="MsgCannotDeleteFreeSubscription" xml:space="preserve">
     <value>گروه رایگان داخلی است و حذف نمی‌شود</value>
   </data>
+  <data name="FreeGroupEmptyTitle" xml:space="preserve">
+    <value>به‌زودی</value>
+  </data>
+  <data name="FreeGroupEmptyMessage" xml:space="preserve">
+    <value>برای خرید به سایت مراجعه کنید.</value>
+  </data>
   <data name="menuSpeedServer" xml:space="preserve">
     <value>تست سرعت دانلود سرورها</value>
   </data>

@@ -98,6 +98,7 @@
                     <materialDesign:PackIcon VerticalAlignment="Center" Kind="Speedometer" />
                 </Button>
             </WrapPanel>
+            <Grid>
             <DataGrid
                 x:Name="lstProfiles"
                 materialDesign:DataGridAssist.CellPadding="2,2"
@@ -388,6 +389,31 @@
                         Header="{x:Static resx:ResUI.LvTotalDownloadDataAmount}" />
                 </DataGrid.Columns>
             </DataGrid>
+                <StackPanel
+                    x:Name="freeEmptyHint"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Visibility="Collapsed">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="20"
+                        FontWeight="SemiBold"
+                        Text="{x:Static resx:ResUI.FreeGroupEmptyTitle}" />
+                    <TextBlock
+                        MaxWidth="420"
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Center"
+                        Text="{x:Static resx:ResUI.FreeGroupEmptyMessage}"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+                    <Button
+                        x:Name="btnFreeEmptyBuy"
+                        Margin="0,16,0,0"
+                        HorizontalAlignment="Center"
+                        Content="{x:Static resx:ResUI.menuSiteBuy}"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                </StackPanel>
+            </Grid>
         </DockPanel>
     </Grid>
 </reactiveui:ReactiveUserControl>

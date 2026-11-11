@@ -17,6 +17,7 @@ public partial class ProfilesView : ReactiveUserControl<ProfilesViewModel>
         _config = AppManager.Instance.Config;
 
         menuSelectAll.Click += menuSelectAll_Click;
+        btnFreeEmptyBuy.Click += (_, _) => ProcUtils.ProcessStart(Global.SitePlansUrl);
         btnAutofitColumnWidth.Click += BtnAutofitColumnWidth_Click;
         txtServerFilter.KeyDown += TxtServerFilter_KeyDown;
         lstProfiles.KeyDown += LstProfiles_KeyDown;
@@ -27,6 +28,7 @@ public partial class ProfilesView : ReactiveUserControl<ProfilesViewModel>
         this.WhenActivated(disposables =>
         {
             this.OneWayBind(ViewModel, vm => vm.ProfileItems, v => v.lstProfiles.ItemsSource).DisposeWith(disposables);
+            this.OneWayBind(ViewModel, vm => vm.ShowFreeEmptyHint, v => v.freeEmptyHint.IsVisible).DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.SelectedProfile, v => v.lstProfiles.SelectedItem).DisposeWith(disposables);
 
             // this.OneWayBind(ViewModel, vm => vm.SubItems, v => v.lstGroup.ItemsSource).DisposeWith(disposables);

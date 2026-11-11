@@ -1871,6 +1871,18 @@ namespace ServiceLib.Resx {
                 return ResourceManager.GetString("MsgCannotDeleteFreeSubscription", resourceCulture);
             }
         }
+
+        public static string FreeGroupEmptyTitle {
+            get {
+                return ResourceManager.GetString("FreeGroupEmptyTitle", resourceCulture);
+            }
+        }
+
+        public static string FreeGroupEmptyMessage {
+            get {
+                return ResourceManager.GetString("FreeGroupEmptyMessage", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 Test download speed 的本地化字符串。

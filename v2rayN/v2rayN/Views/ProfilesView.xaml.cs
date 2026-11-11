@@ -25,6 +25,7 @@ public partial class ProfilesView
         lstProfiles.SelectionChanged += LstProfiles_SelectionChanged;
         lstProfiles.LoadingRow += LstProfiles_LoadingRow;
         menuSelectAll.Click += menuSelectAll_Click;
+        btnFreeEmptyBuy.Click += (_, _) => ProcUtils.ProcessStart(Global.SitePlansUrl);
 
         if (_config.UiItem.EnableDragDropSort)
         {
@@ -38,6 +39,8 @@ public partial class ProfilesView
         this.WhenActivated(disposables =>
         {
             this.OneWayBind(ViewModel, vm => vm.ProfileItems, v => v.lstProfiles.ItemsSource).DisposeWith(disposables);
+            this.OneWayBind(ViewModel, vm => vm.ShowFreeEmptyHint, v => v.freeEmptyHint.Visibility,
+                show => show ? Visibility.Visible : Visibility.Collapsed).DisposeWith(disposables);
             this.Bind(ViewModel, vm => vm.SelectedProfile, v => v.lstProfiles.SelectedItem).DisposeWith(disposables);
 
             this.OneWayBind(ViewModel, vm => vm.SubItems, v => v.lstGroup.ItemsSource).DisposeWith(disposables);

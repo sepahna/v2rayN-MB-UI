@@ -28,6 +28,8 @@ public partial class ProfilesViewModel : MyReactiveObject
 
     public BulkObservableCollection<ProfileItemModel> ProfileItems { get; } = [];
 
+    [Reactive] public partial bool ShowFreeEmptyHint { get; set; }
+
     public BulkObservableCollection<SubItem> SubItems { get; } = [];
 
     [Reactive]
@@ -370,6 +372,9 @@ public partial class ProfilesViewModel : MyReactiveObject
         var lstModel = await GetProfileItemsEx(_config.SubIndexId, _serverFilter);
 
         ProfileItems.ReplaceRange(lstModel ?? []);
+        ShowFreeEmptyHint = FreeSubscription.IsFree(_config.SubIndexId)
+            && _serverFilter.IsNullOrEmpty()
+            && (lstModel == null || lstModel.Count == 0);
         if (lstModel?.Count > 0)
         {
             ProfileItemModel? selected = null;
