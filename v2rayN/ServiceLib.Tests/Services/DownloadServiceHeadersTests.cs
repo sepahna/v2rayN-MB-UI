@@ -89,9 +89,22 @@ public class DownloadServiceHeadersTests
         await requests[1].ContainsKey("Accept").Should().BeFalse();
     }
 
+    [Test]
+    public async Task TryDownloadString_ReturnsEmptyStringForAnEmptyBody()
+    {
+        await CertPemManager.Instance.Init(new Config { GuiItem = new GUIItem() });
+        await using var server = new SubscriptionHttpServer(body: "");
+        var service = new DownloadService();
+
+        var content = await service.TryDownloadString(server.Url, (IWebProxy?)null, "TestClient/1.0").WaitAsync(TimeSpan.FromSeconds(20));
+
+        await content.Should().BeEqualTo(string.Empty);
+    }
+
     private sealed class SubscriptionHttpServer : IAsyncDisposable
     {
         public const string Body = "subscription-test-content";
+        private readonly string _body;
         private readonly TcpListener _listener = new(IPAddress.Loopback, 0);
         private readonly CancellationTokenSource _cancellation = new();
         private readonly Task _serverTask;
@@ -100,9 +113,10 @@ public class DownloadServiceHeadersTests
         public string Url { get; }
         public ConcurrentQueue<Dictionary<string, string>> Requests { get; } = new();
 
-        public SubscriptionHttpServer(bool failFirstRequest = false)
+        public SubscriptionHttpServer(bool failFirstRequest = false, string? body = null)
         {
             _failFirstRequest = failFirstRequest;
+            _body = body ?? Body;
             _listener.Start();
             Url = $"http://127.0.0.1:{((IPEndPoint)_listener.LocalEndpoint).Port}/subscription";
             _serverTask = ServeAsync();
@@ -133,8 +147,8 @@ public class DownloadServiceHeadersTests
                 Requests.Enqueue(headers);
 
                 var status = _failFirstRequest && Requests.Count == 1 ? "503 Service Unavailable" : "200 OK";
-                var body = requestLine.StartsWith("HEAD ") ? "" : Body;
-                var response = $"HTTP/1.1 {status}\r\nContent-Length: {Body.Length}\r\nConnection: close\r\n\r\n{body}";
+                var body = requestLine.StartsWith("HEAD ") ? "" : _body;
+                var response = $"HTTP/1.1 {status}\r\nContent-Length: {body.Length}\r\nConnection: close\r\n\r\n{body}";
                 await stream.WriteAsync(Encoding.ASCII.GetBytes(response), cancellationToken);
             }
         }

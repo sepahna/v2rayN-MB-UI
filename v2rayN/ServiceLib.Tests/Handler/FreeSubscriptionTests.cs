@@ -33,8 +33,9 @@ public class FreeSubscriptionTests
     }
 
     [Test]
-    public async Task IsExplicitlyEmptyFeed_AcceptsBlankAndRejectsErrorHtml()
+    public async Task IsExplicitlyEmptyFeed_AcceptsBlankAndRejectsFailureAndErrorHtml()
     {
+        await FreeSubscription.IsExplicitlyEmptyFeed(null).Should().BeFalse();
         await FreeSubscription.IsExplicitlyEmptyFeed("").Should().BeTrue();
         await FreeSubscription.IsExplicitlyEmptyFeed("   ").Should().BeTrue();
         await FreeSubscription.IsExplicitlyEmptyFeed(Convert.ToBase64String(Encoding.UTF8.GetBytes("  "))).Should().BeTrue();

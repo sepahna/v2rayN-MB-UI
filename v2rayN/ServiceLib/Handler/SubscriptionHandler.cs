@@ -99,20 +99,25 @@ public static class SubscriptionHandler
         return downloadHandle;
     }
 
-    private static async Task<string> DownloadSubscriptionContent(DownloadService downloadHandle, string url, bool blProxy, string userAgent)
+    private static async Task<string?> DownloadSubscriptionContent(DownloadService downloadHandle, string url, bool blProxy, string userAgent)
     {
         var result = await downloadHandle.TryDownloadString(url, blProxy, userAgent);
 
-        // If download with proxy fails, try direct connection
+        // If download with proxy fails, try direct connection.
+        // Keep an explicit empty body; only a failed download comes back as null.
         if (blProxy && result.IsNullOrEmpty())
         {
-            result = await downloadHandle.TryDownloadString(url, false, userAgent);
+            var direct = await downloadHandle.TryDownloadString(url, false, userAgent);
+            if (direct.IsNotEmpty() || result is null)
+            {
+                result = direct;
+            }
         }
 
-        return result ?? string.Empty;
+        return result;
     }
 
-    private static async Task<string> DownloadAllSubscriptions(Config config, SubItem item, bool blProxy, DownloadService downloadHandle)
+    private static async Task<string?> DownloadAllSubscriptions(Config config, SubItem item, bool blProxy, DownloadService downloadHandle)
     {
         // Download main subscription content
         var result = await DownloadMainSubscription(config, item, blProxy, downloadHandle);
@@ -126,7 +131,7 @@ public static class SubscriptionHandler
         return result;
     }
 
-    private static async Task<string> DownloadMainSubscription(Config config, SubItem item, bool blProxy, DownloadService downloadHandle)
+    private static async Task<string?> DownloadMainSubscription(Config config, SubItem item, bool blProxy, DownloadService downloadHandle)
     {
         // Prepare subscription URL and download directly
         var url = Utils.GetPunycode(item.Url.TrimEx());
@@ -155,7 +160,7 @@ public static class SubscriptionHandler
         return await DownloadSubscriptionContent(downloadHandle, url, blProxy, item.UserAgent);
     }
 
-    private static async Task<string> DownloadAdditionalSubscriptions(SubItem item, string mainResult, bool blProxy, DownloadService downloadHandle)
+    private static async Task<string?> DownloadAdditionalSubscriptions(SubItem item, string? mainResult, bool blProxy, DownloadService downloadHandle)
     {
         var result = mainResult;
 
@@ -194,7 +199,7 @@ public static class SubscriptionHandler
         return result;
     }
 
-    private static async Task<bool> ProcessDownloadResult(Config config, string id, string result, string hashCode, Func<bool, string, Task> updateFunc)
+    private static async Task<bool> ProcessDownloadResult(Config config, string id, string? result, string hashCode, Func<bool, string, Task> updateFunc)
     {
         if (FreeSubscription.IsFree(id) && FreeSubscription.IsExplicitlyEmptyFeed(result))
         {

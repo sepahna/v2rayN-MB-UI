@@ -22,10 +22,15 @@ public static class FreeSubscription
 
     /// <summary>
     /// True only for a deliberate empty list: blank body, or base64 that decodes to blank.
-    /// An error page must not wipe saved free configs.
+    /// Null means the download failed. An error page or a failed download must not wipe saved free configs.
     /// </summary>
     public static bool IsExplicitlyEmptyFeed(string? body)
     {
+        if (body is null)
+        {
+            return false;
+        }
+
         if (body.IsNullOrEmpty())
         {
             return true;

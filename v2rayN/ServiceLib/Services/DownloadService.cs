@@ -203,12 +203,13 @@ public class DownloadService
     /// </summary>
     public async Task<string?> TryDownloadString(string url, IWebProxy? webProxy, string userAgent, CancellationToken cancellationToken = default)
     {
+        string? first = null;
         try
         {
-            var result1 = await DownloadStringAsync(url, webProxy, userAgent, cancellationToken);
-            if (result1.IsNotEmpty())
+            first = await DownloadStringAsync(url, webProxy, userAgent, cancellationToken);
+            if (first.IsNotEmpty())
             {
-                return result1;
+                return first;
             }
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -225,12 +226,13 @@ public class DownloadService
             }
         }
 
+        string? second = null;
         try
         {
-            var result2 = await DownloadStringViaDownloader(url, webProxy, userAgent, cancellationToken);
-            if (result2.IsNotEmpty())
+            second = await DownloadStringViaDownloader(url, webProxy, userAgent, cancellationToken);
+            if (second.IsNotEmpty())
             {
-                return result2;
+                return second;
             }
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -247,7 +249,8 @@ public class DownloadService
             }
         }
 
-        return null;
+        // Empty string is a successful empty body. Null means both attempts failed.
+        return first ?? second;
     }
 
     /// <summary>
