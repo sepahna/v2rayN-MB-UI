@@ -101,6 +101,56 @@ public partial class StatusBarViewModel : MyReactiveObject
     [Reactive]
     public partial bool BlIsNonWindows { get; set; }
 
+    [Reactive]
+    public partial bool HomeConnected { get; set; }
+
+    [Reactive]
+    public partial bool HomeHasFlag { get; set; }
+
+    [Reactive]
+    public partial string HomeLineLabel { get; set; }
+
+    [Reactive]
+    public partial string HomeIpText { get; set; }
+
+    [Reactive]
+    public partial string HomeFlagText { get; set; }
+
+    [Reactive]
+    public partial string HomeDownloadText { get; set; }
+
+    [Reactive]
+    public partial string HomeUploadText { get; set; }
+
+    [Reactive]
+    public partial string HomeTrafficText { get; set; }
+
+    [Reactive]
+    public partial int HomeWaveVersion { get; set; }
+
+    public double[] HomeDownloadWave { get; private set; } = [];
+
+    public double[] HomeUploadWave { get; private set; } = [];
+
+    public ReactiveCommand<RxVoid, RxVoid> ToggleHomeConnectionCmd { get; }
+
+    public ReactiveCommand<RxVoid, RxVoid> ToggleHomeIpCmd { get; }
+
+    public ReactiveCommand<RxVoid, RxVoid> RefreshHomeLineCmd { get; }
+
+    private bool _homeReady;
+    private bool _checking;
+    private bool _showFullIp;
+    private int _lineGeneration;
+    private string? _rawIp;
+    private string? _country;
+    private long _lastDown;
+    private long _lastUp;
+    private long _sessionUpKb;
+    private long _sessionDownKb;
+    private readonly List<double> _downWave = [];
+    private readonly List<double> _upWave = [];
+
     #endregion UI
 
     public StatusBarViewModel()
@@ -195,6 +245,26 @@ public partial class StatusBarViewModel : MyReactiveObject
             await SetListenerType(ESysProxyType.Pac);
         });
 
+        HomeLineLabel = ResUI.HomeLineDirect;
+        HomeIpText = ResUI.HomeLineUnknown;
+        HomeFlagText = string.Empty;
+        HomeDownloadText = "↓ 0.0 B/s";
+        HomeUploadText = "↑ 0.0 B/s";
+        HomeTrafficText = string.Format(ResUI.HomeTrafficSession, "0.0 B");
+        ToggleHomeConnectionCmd = ReactiveCommand.CreateFromTask(ToggleHomeConnection);
+        ToggleHomeIpCmd = ReactiveCommand.Create(ToggleHomeIp);
+        RefreshHomeLineCmd = ReactiveCommand.CreateFromTask(RefreshHomeLineAsync);
+        this.WhenAnyValue(x => x.BlSystemProxySet, x => x.EnableTun, (proxy, tun) => proxy || tun)
+            .DistinctUntilChanged()
+            .Skip(1)
+            .SubscribeAsync(async _ =>
+            {
+                if (_homeReady)
+                {
+                    await ResetHomeConnectionAsync();
+                }
+            });
+
         #endregion WhenAnyValue && ReactiveCommand
 
         #region AppEvents
@@ -223,6 +293,8 @@ public partial class StatusBarViewModel : MyReactiveObject
         await ChangeSystemProxyAsync(_config.SystemProxyItem.SysProxyType, false);
 
         BlRouting = true;
+        _homeReady = true;
+        await RefreshHomeLineAsync();
     }
 
     private async Task CopyProxyCmdToClipboard()
@@ -507,8 +579,142 @@ public partial class StatusBarViewModel : MyReactiveObject
         await Task.CompletedTask;
     }
 
+    private bool IsHomeConnected() => BlSystemProxySet || EnableTun;
+
+    private async Task ResetHomeConnectionAsync()
+    {
+        _showFullIp = false;
+        _rawIp = null;
+        _country = null;
+        _lastDown = 0;
+        _lastUp = 0;
+        _sessionUpKb = 0;
+        _sessionDownKb = 0;
+        _downWave.Clear();
+        _upWave.Clear();
+        HomeDownloadWave = [];
+        HomeUploadWave = [];
+        HomeWaveVersion++;
+        await RefreshHomeLineAsync();
+    }
+
+    private async Task RefreshHomeLineAsync()
+    {
+        var generation = ++_lineGeneration;
+        var connected = IsHomeConnected();
+        HomeConnected = connected;
+        _checking = true;
+        PublishHomeLine(checking: true);
+
+        try
+        {
+            if (connected)
+            {
+                await Task.Delay(700);
+                if (generation != _lineGeneration || IsHomeConnected() != connected)
+                {
+                    return;
+                }
+            }
+
+            IWebProxy? proxy = null;
+            if (connected)
+            {
+                var port = AppManager.Instance.GetLocalPort(EInboundProtocol.socks);
+                proxy = new WebProxy($"socks5://{Global.Loopback}:{port}");
+            }
+
+            var info = await ConnectionHandler.GetIPInfo(proxy);
+            if (generation != _lineGeneration || IsHomeConnected() != connected)
+            {
+                return;
+            }
+
+            _rawIp = info?.Ip;
+            _country = info?.Country;
+        }
+        finally
+        {
+            if (generation == _lineGeneration)
+            {
+                _checking = false;
+                PublishHomeLine(checking: false);
+            }
+        }
+    }
+
+    private void ToggleHomeIp()
+    {
+        if (string.IsNullOrEmpty(_rawIp) || !IsHomeConnected())
+        {
+            _ = RefreshHomeLineAsync();
+            return;
+        }
+
+        _showFullIp = !_showFullIp;
+        PublishHomeLine(checking: false);
+    }
+
+    private async Task ToggleHomeConnection()
+    {
+        if (EnableTun)
+        {
+            EnableTun = false;
+            return;
+        }
+
+        await SetListenerType(BlSystemProxySet ? ESysProxyType.ForcedClear : ESysProxyType.ForcedChange);
+    }
+
+    private void PublishHomeLine(bool checking)
+    {
+        var connected = HomeConnected;
+        var name = HomeLineFormat.CountryName(_country);
+        HomeLineLabel = connected
+            ? (string.IsNullOrEmpty(name) ? ResUI.HomeLineVpn : string.Format(ResUI.HomeLineVpnCountry, name))
+            : ResUI.HomeLineDirect;
+        HomeIpText = string.IsNullOrEmpty(_rawIp)
+            ? (checking ? ResUI.HomeLineUnknown : ResUI.HomeLineUnavailable)
+            : (connected && !_showFullIp ? HomeLineFormat.MaskIp(_rawIp) : _rawIp!);
+        var code = CountryExtension.NormalizeCountryCode(_country);
+        HomeFlagText = code ?? string.Empty;
+        HomeHasFlag = code != null;
+        HomeDownloadText = $"↓ {Utils.HumanFy(_lastDown)}/s";
+        HomeUploadText = $"↑ {Utils.HumanFy(_lastUp)}/s";
+        HomeTrafficText = string.Format(ResUI.HomeTrafficSession, Utils.HumanFy(_sessionDownKb + _sessionUpKb));
+    }
+
+    private void ApplyHomeSpeed(ServerSpeedItem update)
+    {
+        if (!IsHomeConnected())
+        {
+            return;
+        }
+
+        _lastDown = Math.Max(0, update.ProxyDown);
+        _lastUp = Math.Max(0, update.ProxyUp);
+        _sessionDownKb += _lastDown;
+        _sessionUpKb += _lastUp;
+        AppendWave(_downWave, _lastDown);
+        AppendWave(_upWave, _lastUp);
+        HomeDownloadWave = _downWave.ToArray();
+        HomeUploadWave = _upWave.ToArray();
+        HomeWaveVersion++;
+        PublishHomeLine(checking: _checking);
+    }
+
+    private static void AppendWave(List<double> samples, long value)
+    {
+        samples.Add(value);
+        if (samples.Count > 40)
+        {
+            samples.RemoveAt(0);
+        }
+    }
+
     public async Task UpdateStatistics(ServerSpeedItem update)
     {
+        ApplyHomeSpeed(update);
         if (!_config.GuiItem.DisplayRealTimeSpeed)
         {
             return;

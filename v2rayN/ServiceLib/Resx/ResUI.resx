@@ -441,6 +441,24 @@
   <data name="menuReload" xml:space="preserve">
     <value>Reload</value>
   </data>
+  <data name="HomeLineDirect" xml:space="preserve">
+    <value>Your line</value>
+  </data>
+  <data name="HomeLineVpn" xml:space="preserve">
+    <value>Through VPN</value>
+  </data>
+  <data name="HomeLineVpnCountry" xml:space="preserve">
+    <value>Through VPN - {0}</value>
+  </data>
+  <data name="HomeLineUnknown" xml:space="preserve">
+    <value>Checking IP…</value>
+  </data>
+  <data name="HomeLineUnavailable" xml:space="preserve">
+    <value>IP unavailable</value>
+  </data>
+  <data name="HomeTrafficSession" xml:space="preserve">
+    <value>Traffic {0}</value>
+  </data>
   <data name="menuRoutingSetting" xml:space="preserve">
     <value>Routing Setting</value>
   </data>

@@ -406,6 +406,8 @@
                     </ToolBar>
                 </ToolBarTray>
 
+                <ContentControl x:Name="contentHomeLine" DockPanel.Dock="Top" />
+
                 <ContentControl x:Name="contentStatusBarView" DockPanel.Dock="Bottom" />
 
                 <Grid>

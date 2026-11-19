@@ -1589,6 +1589,42 @@ namespace ServiceLib.Resx {
                 return ResourceManager.GetString("menuReload", resourceCulture);
             }
         }
+
+        public static string HomeLineDirect {
+            get {
+                return ResourceManager.GetString("HomeLineDirect", resourceCulture);
+            }
+        }
+
+        public static string HomeLineVpn {
+            get {
+                return ResourceManager.GetString("HomeLineVpn", resourceCulture);
+            }
+        }
+
+        public static string HomeLineVpnCountry {
+            get {
+                return ResourceManager.GetString("HomeLineVpnCountry", resourceCulture);
+            }
+        }
+
+        public static string HomeLineUnknown {
+            get {
+                return ResourceManager.GetString("HomeLineUnknown", resourceCulture);
+            }
+        }
+
+        public static string HomeLineUnavailable {
+            get {
+                return ResourceManager.GetString("HomeLineUnavailable", resourceCulture);
+            }
+        }
+
+        public static string HomeTrafficSession {
+            get {
+                return ResourceManager.GetString("HomeTrafficSession", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   查找类似 Backup to remote (WebDAV) 的本地化字符串。

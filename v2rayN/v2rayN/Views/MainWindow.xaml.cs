@@ -96,7 +96,18 @@ public partial class MainWindow
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.StatusBarViewModel)
-                .Subscribe(vm => ViewHost.Show(contentStatusBarView, vm))
+                .Subscribe(vm =>
+                {
+                    ViewHost.Show(contentStatusBarView, vm);
+                    if (contentHomeLine.Content is HomeLineView home)
+                    {
+                        home.ViewModel = vm;
+                    }
+                    else if (vm != null)
+                    {
+                        contentHomeLine.Content = new HomeLineView { ViewModel = vm };
+                    }
+                })
                 .DisposeWith(disposables);
 
             ViewModel.ReadTextFromClipboardInteraction.RegisterHandler(interaction =>

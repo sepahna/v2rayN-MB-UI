@@ -19,13 +19,10 @@ public class StatisticsManager
     {
         _config = config;
         _updateFunc = updateFunc;
-        if (config.GuiItem.EnableStatistics || _config.GuiItem.DisplayRealTimeSpeed)
-        {
-            await InitData();
+        await InitData();
 
-            _statisticsXray = new StatisticsXrayService(config, UpdateServerStatHandler);
-            _statisticsSingbox = new StatisticsSingboxService(config, UpdateServerStatHandler);
-        }
+        _statisticsXray = new StatisticsXrayService(config, UpdateServerStatHandler);
+        _statisticsSingbox = new StatisticsSingboxService(config, UpdateServerStatHandler);
     }
 
     public void Close()

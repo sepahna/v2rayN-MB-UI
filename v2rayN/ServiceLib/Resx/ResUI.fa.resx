@@ -438,6 +438,24 @@
   <data name="menuReload" xml:space="preserve">
     <value>بارگذاری مجدد</value>
   </data>
+  <data name="HomeLineDirect" xml:space="preserve">
+    <value>خط شما</value>
+  </data>
+  <data name="HomeLineVpn" xml:space="preserve">
+    <value>از وی‌پی‌ان</value>
+  </data>
+  <data name="HomeLineVpnCountry" xml:space="preserve">
+    <value>از وی‌پی‌ان - {0}</value>
+  </data>
+  <data name="HomeLineUnknown" xml:space="preserve">
+    <value>در حال بررسی آی‌پی…</value>
+  </data>
+  <data name="HomeLineUnavailable" xml:space="preserve">
+    <value>آی‌پی نامشخص</value>
+  </data>
+  <data name="HomeTrafficSession" xml:space="preserve">
+    <value>ترافیک {0}</value>
+  </data>
   <data name="menuRoutingSetting" xml:space="preserve">
     <value>تنظیم مسیریابی</value>
   </data>
