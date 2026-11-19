@@ -1,5 +1,6 @@
 using System.Windows.Media;
 using System.Windows.Shapes;
+using ShapePath = System.Windows.Shapes.Path;
 
 namespace v2rayN.Views;
 
@@ -27,7 +28,6 @@ public partial class HomeLineView
             this.OneWayBind(ViewModel, vm => vm.HomeUploadText, v => v.txtUpload.Foreground, _ => new SolidColorBrush(UploadColor)).DisposeWith(disposables);
             this.BindCommand(ViewModel, vm => vm.ToggleHomeConnectionCmd, v => v.btnPower).DisposeWith(disposables);
             txtIp.MouseLeftButtonUp += OnIpClick;
-            Disposable.Create(() => txtIp.MouseLeftButtonUp -= OnIpClick).DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.HomeConnected)
                 .Subscribe(on => btnPower.Background = new SolidColorBrush(on ? DownloadColor : Color.FromRgb(0xC4, 0x38, 0x38)))
@@ -108,12 +108,12 @@ public partial class HomeLineView
         fill.Segments.Add(new LineSegment(new Point(width, height - 1), true));
         fill.IsClosed = true;
 
-        wave.Children.Add(new Path
+        wave.Children.Add(new ShapePath
         {
             Fill = new SolidColorBrush(Color.FromArgb(0x29, color.R, color.G, color.B)),
             Data = new PathGeometry(new[] { fill })
         });
-        wave.Children.Add(new Path
+        wave.Children.Add(new ShapePath
         {
             Stroke = new SolidColorBrush(color),
             StrokeThickness = 1.6,
