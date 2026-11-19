@@ -95,7 +95,9 @@ public sealed class AppManager
 
         try
         {
-            FreeSubscription.EnsureAsync().GetAwaiter().GetResult();
+            // Must not block the UI thread. sqlite-net posts completions back to the
+            // current context, so GetResult() here deadlocks and the window never appears.
+            Task.Run(() => FreeSubscription.EnsureAsync()).GetAwaiter().GetResult();
         }
         catch (Exception ex)
         {

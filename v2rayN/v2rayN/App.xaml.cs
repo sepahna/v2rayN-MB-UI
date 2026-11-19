@@ -36,6 +36,7 @@ public partial class App
             return;
         }
 
+        BootLog("startup");
         if (!AppManager.Instance.InitApp())
         {
             UI.Show($"Loading GUI configuration file is abnormal,please restart the application{Environment.NewLine}加载GUI配置文件异常,请重启应用");
@@ -45,7 +46,9 @@ public partial class App
 
         AppManager.Instance.WindowDialog = new WindowDialog();
 
+        BootLog("config loaded");
         AppManager.Instance.InitComponents();
+        BootLog("components ready");
 
         RxAppBuilder.CreateReactiveUIBuilder()
             .WithWpf()
@@ -53,7 +56,20 @@ public partial class App
 
         base.OnStartup(e);
 
-        var mainWindowViewModel = new MainWindowViewModel();
+        MainWindowViewModel mainWindowViewModel;
+        try
+        {
+            BootLog("creating main window");
+            mainWindowViewModel = new MainWindowViewModel();
+        }
+        catch (Exception ex)
+        {
+            BootLog(ex.ToString());
+            MessageBox.Show(ex.ToString(), "v2rayN startup");
+            Shutdown();
+            return;
+        }
+
         var viewFor = SimpleViewLocator.Instance.ResolveView(mainWindowViewModel);
         viewFor!.ViewModel = mainWindowViewModel;
 
@@ -61,33 +77,62 @@ public partial class App
         MainWindow = mainWindow;
         try
         {
-            // Show the shell before any home-card work. A later UI exception must not
-            // leave the process running with neither a window nor a taskbar button.
+            PlaceOnPrimaryScreen(mainWindow);
             mainWindow.ShowInTaskbar = true;
+            mainWindow.Topmost = true;
             mainWindow.Show();
-            if (mainWindow.WindowState == WindowState.Minimized)
-            {
-                mainWindow.WindowState = WindowState.Normal;
-            }
-
+            mainWindow.WindowState = WindowState.Normal;
             mainWindow.Activate();
+            mainWindow.Topmost = false;
             _startupShellReady = true;
+            BootLog("window shown");
         }
         catch (Exception ex)
         {
+            BootLog(ex.ToString());
             Logging.SaveLog("OnStartup", ex);
             ShowMainWindow();
             _startupShellReady = true;
         }
     }
 
+    private static void BootLog(string message)
+    {
+        try
+        {
+            var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "guiLogs");
+            Directory.CreateDirectory(dir);
+            File.AppendAllText(Path.Combine(dir, "startup.txt"),
+                $"{DateTime.Now:HH:mm:ss.fff} {message}{Environment.NewLine}");
+        }
+        catch
+        {
+            // The startup trace must never block the window.
+        }
+    }
+
+    private static void PlaceOnPrimaryScreen(Window window)
+    {
+        var area = SystemParameters.WorkArea;
+        window.WindowStartupLocation = WindowStartupLocation.Manual;
+        window.Width = Math.Min(1100, Math.Max(800, area.Width - 80));
+        window.Height = Math.Min(720, Math.Max(500, area.Height - 80));
+        window.Left = area.Left + Math.Max(0, (area.Width - window.Width) / 2);
+        window.Top = area.Top + Math.Max(0, (area.Height - window.Height) / 2);
+    }
+
     private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         Logging.SaveLog("App_DispatcherUnhandledException", e.Exception);
+        BootLog(e.Exception.ToString());
         e.Handled = true;
         if (!_startupShellReady)
         {
             ShowMainWindow();
+            if (MainWindow is not { IsVisible: true })
+            {
+                MessageBox.Show(e.Exception.ToString(), "v2rayN startup");
+            }
         }
     }
 
@@ -101,7 +146,9 @@ public partial class App
         _restoringShell = true;
         try
         {
+            PlaceOnPrimaryScreen(window);
             window.ShowInTaskbar = true;
+            window.Topmost = true;
             if (window.WindowState == WindowState.Minimized)
             {
                 window.WindowState = WindowState.Normal;
@@ -113,6 +160,7 @@ public partial class App
             }
 
             window.Activate();
+            window.Topmost = false;
         }
         catch (Exception ex)
         {
