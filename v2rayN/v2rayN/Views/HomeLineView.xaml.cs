@@ -31,38 +31,28 @@ public partial class HomeLineView
                 this.BindCommand(ViewModel, vm => vm.ToggleHomeConnectionCmd, v => v.btnPower).DisposeWith(disposables);
                 txtIp.MouseLeftButtonUp += OnIpClick;
 
-                IDisposable? connectedSub = null;
-                IDisposable? waveSub = null;
-                Disposable.Create(() =>
-                {
-                    connectedSub?.Dispose();
-                    waveSub?.Dispose();
-                }).DisposeWith(disposables);
-
+                var homeState = new SingleReplaceableDisposable().DisposeWith(disposables);
                 this.WhenAnyValue(v => v.ViewModel)
                     .Subscribe(vm =>
                     {
-                        connectedSub?.Dispose();
-                        waveSub?.Dispose();
-                        connectedSub = null;
-                        waveSub = null;
-                        if (vm == null)
+                        var inner = new MultipleDisposable();
+                        if (vm != null)
                         {
-                            return;
+                            vm.WhenAnyValue(x => x.HomeConnected).Subscribe(on =>
+                            {
+                                try
+                                {
+                                    btnPower.Background = new SolidColorBrush(on ? DownloadColor : Color.FromRgb(0xC4, 0x38, 0x38));
+                                }
+                                catch (Exception ex)
+                                {
+                                    Logging.SaveLog("HomeLineView", ex);
+                                }
+                            }).DisposeWith(inner);
+                            vm.WhenAnyValue(x => x.HomeWaveVersion).Subscribe(_ => DrawWave()).DisposeWith(inner);
                         }
 
-                        connectedSub = vm.WhenAnyValue(x => x.HomeConnected).Subscribe(on =>
-                        {
-                            try
-                            {
-                                btnPower.Background = new SolidColorBrush(on ? DownloadColor : Color.FromRgb(0xC4, 0x38, 0x38));
-                            }
-                            catch (Exception ex)
-                            {
-                                Logging.SaveLog("HomeLineView", ex);
-                            }
-                        });
-                        waveSub = vm.WhenAnyValue(x => x.HomeWaveVersion).Subscribe(_ => DrawWave());
+                        homeState.Create(inner);
                     })
                     .DisposeWith(disposables);
             }
