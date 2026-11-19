@@ -92,6 +92,19 @@ public partial class MainWindow : WindowBase<MainWindowViewModel>
             this.OneWayBind(ViewModel, vm => vm.BlNewUpdate, v => v.btnNewUpdate.IsVisible).DisposeWith(disposables);
 
             this.OneWayBind(ViewModel, vm => vm.StatusBarViewModel, v => v.contentStatusBarView.Content).DisposeWith(disposables);
+            this.WhenAnyValue(v => v.ViewModel.StatusBarViewModel)
+                .Subscribe(vm =>
+                {
+                    if (contentHomeLine.Content is HomeLineView home)
+                    {
+                        home.ViewModel = vm;
+                    }
+                    else if (vm != null)
+                    {
+                        contentHomeLine.Content = new HomeLineView { ViewModel = vm };
+                    }
+                })
+                .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.MainGirdOrientation)
                 .ObserveOn(RxSchedulers.MainThreadScheduler)

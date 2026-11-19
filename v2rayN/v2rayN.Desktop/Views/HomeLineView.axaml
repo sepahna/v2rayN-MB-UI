@@ -1,0 +1,67 @@
+<UserControl
+    x:Class="v2rayN.Desktop.Views.HomeLineView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ctrl="using:v2rayN.Desktop.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Border
+        Margin="12,4,12,4"
+        Padding="12,8"
+        BorderBrush="#40888888"
+        BorderThickness="1"
+        CornerRadius="10">
+        <Grid ColumnDefinitions="*,Auto">
+            <StackPanel Spacing="2">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <ctrl:FlagTextBlock x:Name="txtFlag" FontSize="18" />
+                    <TextBlock
+                        x:Name="txtGlobe"
+                        VerticalAlignment="Center"
+                        FontSize="18"
+                        Text="🌐" />
+                    <TextBlock
+                        x:Name="txtLabel"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        FontWeight="SemiBold" />
+                </StackPanel>
+                <TextBlock
+                    x:Name="txtIp"
+                    Cursor="Hand"
+                    FontSize="16"
+                    FontWeight="Medium" />
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                    <TextBlock x:Name="txtDownload" FontSize="13" />
+                    <TextBlock x:Name="txtUpload" FontSize="13" />
+                    <TextBlock
+                        x:Name="txtTraffic"
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Opacity="0.75" />
+                </StackPanel>
+                <Canvas
+                    x:Name="wave"
+                    Height="28"
+                    Margin="0,4,0,0" />
+            </StackPanel>
+            <Button
+                x:Name="btnPower"
+                Grid.Column="1"
+                Width="52"
+                Height="52"
+                Margin="12,0,0,0"
+                VerticalAlignment="Center"
+                Background="#C43838"
+                CornerRadius="26">
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="22"
+                    Foreground="White"
+                    Text="⏻" />
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>
