@@ -96,25 +96,7 @@ public partial class MainWindow
                 .DisposeWith(disposables);
 
             this.WhenAnyValue(v => v.ViewModel.StatusBarViewModel)
-                .Subscribe(vm =>
-                {
-                    ViewHost.Show(contentStatusBarView, vm);
-                    try
-                    {
-                        if (contentHomeLine.Content is HomeLineView home)
-                        {
-                            home.ViewModel = vm;
-                        }
-                        else if (vm != null)
-                        {
-                            contentHomeLine.Content = new HomeLineView { ViewModel = vm };
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Logging.SaveLog("HomeLineView", ex);
-                    }
-                })
+                .Subscribe(vm => ViewHost.Show(contentStatusBarView, vm))
                 .DisposeWith(disposables);
 
             ViewModel.ReadTextFromClipboardInteraction.RegisterHandler(interaction =>
@@ -170,10 +152,6 @@ public partial class MainWindow
         });
 
         Title = $"{Utils.GetVersion()} - {(Utils.IsAdministrator() ? ResUI.RunAsAdmin : ResUI.NotRunAsAdmin)}";
-        if (_config.UiItem.AutoHideStartup)
-        {
-            WindowState = WindowState.Minimized;
-        }
 
         if (!_config.GuiItem.EnableHWA)
         {
@@ -347,11 +325,47 @@ public partial class MainWindow
     protected override void OnLoaded(object? sender, RoutedEventArgs e)
     {
         base.OnLoaded(sender, e);
+        ShowInTaskbar = true;
+        if (WindowState == WindowState.Minimized)
+        {
+            WindowState = WindowState.Normal;
+        }
+
+        Activate();
+        RestoreUI();
+
+        // The config list and tray icon are already up. Attach the home card on a
+        // later dispatcher turn so a drawing failure cannot abort the first Show().
+        Dispatcher.BeginInvoke(DispatcherPriority.ApplicationIdle, () => AttachHomeLine());
+    }
+
+    private void AttachHomeLine()
+    {
+        try
+        {
+            if (ViewModel?.StatusBarViewModel is not { } vm)
+            {
+                return;
+            }
+
+            if (contentHomeLine.Content is HomeLineView home)
+            {
+                home.ViewModel = vm;
+            }
+            else
+            {
+                contentHomeLine.Content = new HomeLineView { ViewModel = vm };
+            }
+        }
+        catch (Exception ex)
+        {
+            Logging.SaveLog("HomeLineView", ex);
+        }
+
         if (_config.UiItem.AutoHideStartup)
         {
             ShowHideWindow(false);
         }
-        RestoreUI();
     }
 
     private void RestoreUI()

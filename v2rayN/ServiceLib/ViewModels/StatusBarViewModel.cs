@@ -250,7 +250,7 @@ public partial class StatusBarViewModel : MyReactiveObject
         HomeFlagText = string.Empty;
         HomeDownloadText = "↓ 0.0 B/s";
         HomeUploadText = "↑ 0.0 B/s";
-        HomeTrafficText = string.Format(ResUI.HomeTrafficSession ?? "Traffic {0}", "0.0 B");
+        HomeTrafficText = FormatHomeText(ResUI.HomeTrafficSession, "0.0 B");
         ToggleHomeConnectionCmd = ReactiveCommand.CreateFromTask(ToggleHomeConnection);
         ToggleHomeIpCmd = ReactiveCommand.Create(ToggleHomeIp);
         RefreshHomeLineCmd = ReactiveCommand.CreateFromTask(RefreshHomeLineAsync);
@@ -685,7 +685,7 @@ public partial class StatusBarViewModel : MyReactiveObject
         var connected = HomeConnected;
         var name = HomeLineFormat.CountryName(_country);
         HomeLineLabel = connected
-            ? (string.IsNullOrEmpty(name) ? ResUI.HomeLineVpn : string.Format(ResUI.HomeLineVpnCountry, name))
+            ? (string.IsNullOrEmpty(name) ? ResUI.HomeLineVpn : FormatHomeText(ResUI.HomeLineVpnCountry, name))
             : ResUI.HomeLineDirect;
         HomeIpText = string.IsNullOrEmpty(_rawIp)
             ? (checking ? ResUI.HomeLineUnknown : ResUI.HomeLineUnavailable)
@@ -695,7 +695,24 @@ public partial class StatusBarViewModel : MyReactiveObject
         HomeHasFlag = code != null;
         HomeDownloadText = $"↓ {Utils.HumanFy(_lastDown)}/s";
         HomeUploadText = $"↑ {Utils.HumanFy(_lastUp)}/s";
-        HomeTrafficText = string.Format(ResUI.HomeTrafficSession, Utils.HumanFy(_sessionDownKb + _sessionUpKb));
+        HomeTrafficText = FormatHomeText(ResUI.HomeTrafficSession, Utils.HumanFy(_sessionDownKb + _sessionUpKb));
+    }
+
+    private static string FormatHomeText(string? template, string value)
+    {
+        if (string.IsNullOrEmpty(template))
+        {
+            return value;
+        }
+
+        try
+        {
+            return string.Format(template, value);
+        }
+        catch (FormatException)
+        {
+            return value;
+        }
     }
 
     private void ApplyHomeSpeed(ServerSpeedItem update)

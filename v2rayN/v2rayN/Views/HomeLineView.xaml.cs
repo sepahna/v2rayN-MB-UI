@@ -16,26 +16,60 @@ public partial class HomeLineView
 
         this.WhenActivated(disposables =>
         {
-            this.OneWayBind(ViewModel, vm => vm.HomeLineLabel, v => v.txtLabel.Text).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeIpText, v => v.txtIp.Text).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeFlagText, v => v.txtFlag.FlagText).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeHasFlag, v => v.txtFlag.Visibility, value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeHasFlag, v => v.txtGlobe.Visibility, value => value ? Visibility.Collapsed : Visibility.Visible).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeDownloadText, v => v.txtDownload.Text).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeUploadText, v => v.txtUpload.Text).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeTrafficText, v => v.txtTraffic.Text).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeDownloadText, v => v.txtDownload.Foreground, _ => new SolidColorBrush(DownloadColor)).DisposeWith(disposables);
-            this.OneWayBind(ViewModel, vm => vm.HomeUploadText, v => v.txtUpload.Foreground, _ => new SolidColorBrush(UploadColor)).DisposeWith(disposables);
-            this.BindCommand(ViewModel, vm => vm.ToggleHomeConnectionCmd, v => v.btnPower).DisposeWith(disposables);
-            txtIp.MouseLeftButtonUp += OnIpClick;
+            try
+            {
+                this.OneWayBind(ViewModel, vm => vm.HomeLineLabel, v => v.txtLabel.Text).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeIpText, v => v.txtIp.Text).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeFlagText, v => v.txtFlag.FlagText).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeHasFlag, v => v.txtFlag.Visibility, value => value ? Visibility.Visible : Visibility.Collapsed).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeHasFlag, v => v.txtGlobe.Visibility, value => value ? Visibility.Collapsed : Visibility.Visible).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeDownloadText, v => v.txtDownload.Text).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeUploadText, v => v.txtUpload.Text).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeTrafficText, v => v.txtTraffic.Text).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeDownloadText, v => v.txtDownload.Foreground, _ => new SolidColorBrush(DownloadColor)).DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.HomeUploadText, v => v.txtUpload.Foreground, _ => new SolidColorBrush(UploadColor)).DisposeWith(disposables);
+                this.BindCommand(ViewModel, vm => vm.ToggleHomeConnectionCmd, v => v.btnPower).DisposeWith(disposables);
+                txtIp.MouseLeftButtonUp += OnIpClick;
 
-            this.WhenAnyValue(v => v.ViewModel!.HomeConnected)
-                .Subscribe(on => btnPower.Background = new SolidColorBrush(on ? DownloadColor : Color.FromRgb(0xC4, 0x38, 0x38)))
-                .DisposeWith(disposables);
+                IDisposable? connectedSub = null;
+                IDisposable? waveSub = null;
+                Disposable.Create(() =>
+                {
+                    connectedSub?.Dispose();
+                    waveSub?.Dispose();
+                }).DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel!.HomeWaveVersion)
-                .Subscribe(_ => DrawWave())
-                .DisposeWith(disposables);
+                this.WhenAnyValue(v => v.ViewModel)
+                    .Subscribe(vm =>
+                    {
+                        connectedSub?.Dispose();
+                        waveSub?.Dispose();
+                        connectedSub = null;
+                        waveSub = null;
+                        if (vm == null)
+                        {
+                            return;
+                        }
+
+                        connectedSub = vm.WhenAnyValue(x => x.HomeConnected).Subscribe(on =>
+                        {
+                            try
+                            {
+                                btnPower.Background = new SolidColorBrush(on ? DownloadColor : Color.FromRgb(0xC4, 0x38, 0x38));
+                            }
+                            catch (Exception ex)
+                            {
+                                Logging.SaveLog("HomeLineView", ex);
+                            }
+                        });
+                        waveSub = vm.WhenAnyValue(x => x.HomeWaveVersion).Subscribe(_ => DrawWave());
+                    })
+                    .DisposeWith(disposables);
+            }
+            catch (Exception ex)
+            {
+                Logging.SaveLog("HomeLineView", ex);
+            }
         });
 
         wave.SizeChanged += (_, _) => DrawWave();
@@ -48,6 +82,18 @@ public partial class HomeLineView
     }
 
     private void DrawWave()
+    {
+        try
+        {
+            DrawWaveCore();
+        }
+        catch (Exception ex)
+        {
+            Logging.SaveLog("HomeLineView", ex);
+        }
+    }
+
+    private void DrawWaveCore()
     {
         wave.Children.Clear();
         if (ViewModel == null || wave.ActualWidth < 2)

@@ -9,6 +9,8 @@ namespace v2rayN;
 public partial class App
 {
     public static EventWaitHandle ProgramStarted;
+    private bool _startupShellReady;
+    private bool _restoringShell;
 
     public App()
     {
@@ -56,14 +58,70 @@ public partial class App
         viewFor!.ViewModel = mainWindowViewModel;
 
         var mainWindow = (MainWindow)viewFor;
-        mainWindow.Show();
         MainWindow = mainWindow;
+        try
+        {
+            // Show the shell before any home-card work. A later UI exception must not
+            // leave the process running with neither a window nor a taskbar button.
+            mainWindow.ShowInTaskbar = true;
+            mainWindow.Show();
+            if (mainWindow.WindowState == WindowState.Minimized)
+            {
+                mainWindow.WindowState = WindowState.Normal;
+            }
+
+            mainWindow.Activate();
+            _startupShellReady = true;
+        }
+        catch (Exception ex)
+        {
+            Logging.SaveLog("OnStartup", ex);
+            ShowMainWindow();
+            _startupShellReady = true;
+        }
     }
 
     private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
         Logging.SaveLog("App_DispatcherUnhandledException", e.Exception);
         e.Handled = true;
+        if (!_startupShellReady)
+        {
+            ShowMainWindow();
+        }
+    }
+
+    private void ShowMainWindow()
+    {
+        if (_restoringShell || MainWindow is not Window window)
+        {
+            return;
+        }
+
+        _restoringShell = true;
+        try
+        {
+            window.ShowInTaskbar = true;
+            if (window.WindowState == WindowState.Minimized)
+            {
+                window.WindowState = WindowState.Normal;
+            }
+
+            if (!window.IsVisible)
+            {
+                window.Show();
+            }
+
+            window.Activate();
+        }
+        catch (Exception ex)
+        {
+            Logging.SaveLog("ShowMainWindow", ex);
+        }
+        finally
+        {
+            _restoringShell = false;
+        }
     }
 
     private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
