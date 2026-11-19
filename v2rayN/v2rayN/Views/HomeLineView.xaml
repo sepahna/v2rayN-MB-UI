@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:base="clr-namespace:v2rayN.Base"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:reactiveui="http://reactiveui.net"
     xmlns:vms="clr-namespace:ServiceLib.ViewModels;assembly=ServiceLib"
@@ -79,20 +78,15 @@
                 Height="52"
                 Margin="12,0,0,0"
                 VerticalAlignment="Center"
+                Background="#C43838"
+                BorderThickness="0"
                 ToolTip="VPN">
-                <Button.Template>
-                    <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="26">
-                            <materialDesign:PackIcon
-                                Width="26"
-                                Height="26"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center"
-                                Foreground="White"
-                                Kind="Power" />
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontSize="22"
+                    Foreground="White"
+                    Text="⏻" />
             </Button>
         </Grid>
     </Border>

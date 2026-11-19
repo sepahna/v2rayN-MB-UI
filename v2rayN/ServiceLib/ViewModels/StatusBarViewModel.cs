@@ -245,12 +245,12 @@ public partial class StatusBarViewModel : MyReactiveObject
             await SetListenerType(ESysProxyType.Pac);
         });
 
-        HomeLineLabel = ResUI.HomeLineDirect;
-        HomeIpText = ResUI.HomeLineUnknown;
+        HomeLineLabel = ResUI.HomeLineDirect ?? "Your line";
+        HomeIpText = ResUI.HomeLineUnknown ?? "Checking IP…";
         HomeFlagText = string.Empty;
         HomeDownloadText = "↓ 0.0 B/s";
         HomeUploadText = "↑ 0.0 B/s";
-        HomeTrafficText = string.Format(ResUI.HomeTrafficSession, "0.0 B");
+        HomeTrafficText = string.Format(ResUI.HomeTrafficSession ?? "Traffic {0}", "0.0 B");
         ToggleHomeConnectionCmd = ReactiveCommand.CreateFromTask(ToggleHomeConnection);
         ToggleHomeIpCmd = ReactiveCommand.Create(ToggleHomeIp);
         RefreshHomeLineCmd = ReactiveCommand.CreateFromTask(RefreshHomeLineAsync);
@@ -294,7 +294,21 @@ public partial class StatusBarViewModel : MyReactiveObject
 
         BlRouting = true;
         _homeReady = true;
-        await RefreshHomeLineAsync();
+        // Let the main window and tray icon finish loading before the first IP request.
+        _ = RefreshHomeLineAfterStartupAsync();
+    }
+
+    private async Task RefreshHomeLineAfterStartupAsync()
+    {
+        try
+        {
+            await Task.Delay(1500);
+            await RefreshHomeLineAsync();
+        }
+        catch (Exception ex)
+        {
+            Logging.SaveLog("HomeLine", ex);
+        }
     }
 
     private async Task CopyProxyCmdToClipboard()

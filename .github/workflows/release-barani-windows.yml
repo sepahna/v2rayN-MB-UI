@@ -34,8 +34,7 @@ jobs:
       - name: Fetch core binaries
         run: |
           set -euo pipefail
-          wget -nv -O core.zip "https://github.com/2dust/v2rayN-core-bin/raw/refs/heads/master/v2rayN-windows-64.zip"
-          7z x core.zip -y
+          wget -nv -O v2rayN-windows-64.zip "https://github.com/2dust/v2rayN-core-bin/raw/refs/heads/master/v2rayN-windows-64.zip"
 
       - name: Create release zip
         run: |

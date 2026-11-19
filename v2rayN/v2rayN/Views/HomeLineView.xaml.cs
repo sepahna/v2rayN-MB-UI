@@ -29,11 +29,17 @@ public partial class HomeLineView
             this.BindCommand(ViewModel, vm => vm.ToggleHomeConnectionCmd, v => v.btnPower).DisposeWith(disposables);
             txtIp.MouseLeftButtonUp += OnIpClick;
 
-            this.WhenAnyValue(v => v.ViewModel.HomeConnected)
+            this.WhenAnyValue(v => v.ViewModel)
+                .Where(vm => vm != null)
+                .Select(vm => vm!.WhenAnyValue(x => x.HomeConnected))
+                .Switch()
                 .Subscribe(on => btnPower.Background = new SolidColorBrush(on ? DownloadColor : Color.FromRgb(0xC4, 0x38, 0x38)))
                 .DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel.HomeWaveVersion)
+            this.WhenAnyValue(v => v.ViewModel)
+                .Where(vm => vm != null)
+                .Select(vm => vm!.WhenAnyValue(x => x.HomeWaveVersion))
+                .Switch()
                 .Subscribe(_ => DrawWave())
                 .DisposeWith(disposables);
         });
@@ -100,9 +106,8 @@ public partial class HomeLineView
         for (var i = 0; i < points.Length - 1; i++)
         {
             var midX = (points[i].X + points[i + 1].X) / 2;
-            var segment = new BezierSegment(new Point(midX, points[i].Y), new Point(midX, points[i + 1].Y), points[i + 1], true);
-            line.Segments.Add(segment);
-            fill.Segments.Add(segment);
+            line.Segments.Add(new BezierSegment(new Point(midX, points[i].Y), new Point(midX, points[i + 1].Y), points[i + 1], true));
+            fill.Segments.Add(new BezierSegment(new Point(midX, points[i].Y), new Point(midX, points[i + 1].Y), points[i + 1], true));
         }
 
         fill.Segments.Add(new LineSegment(new Point(width, height - 1), true));

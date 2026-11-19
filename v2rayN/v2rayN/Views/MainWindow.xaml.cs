@@ -99,13 +99,20 @@ public partial class MainWindow
                 .Subscribe(vm =>
                 {
                     ViewHost.Show(contentStatusBarView, vm);
-                    if (contentHomeLine.Content is HomeLineView home)
+                    try
                     {
-                        home.ViewModel = vm;
+                        if (contentHomeLine.Content is HomeLineView home)
+                        {
+                            home.ViewModel = vm;
+                        }
+                        else if (vm != null)
+                        {
+                            contentHomeLine.Content = new HomeLineView { ViewModel = vm };
+                        }
                     }
-                    else if (vm != null)
+                    catch (Exception ex)
                     {
-                        contentHomeLine.Content = new HomeLineView { ViewModel = vm };
+                        Logging.SaveLog("HomeLineView", ex);
                     }
                 })
                 .DisposeWith(disposables);
