@@ -1,3 +1,4 @@
+# Public Windows release. Cores come from 2dust/v2rayN-core-bin at package time.
 name: release Barani Windows
 
 on:
