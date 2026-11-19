@@ -29,17 +29,11 @@ public partial class HomeLineView
             this.BindCommand(ViewModel, vm => vm.ToggleHomeConnectionCmd, v => v.btnPower).DisposeWith(disposables);
             txtIp.MouseLeftButtonUp += OnIpClick;
 
-            this.WhenAnyValue(v => v.ViewModel)
-                .Where(vm => vm != null)
-                .Select(vm => vm!.WhenAnyValue(x => x.HomeConnected))
-                .Switch()
+            this.WhenAnyValue(v => v.ViewModel!.HomeConnected)
                 .Subscribe(on => btnPower.Background = new SolidColorBrush(on ? DownloadColor : Color.FromRgb(0xC4, 0x38, 0x38)))
                 .DisposeWith(disposables);
 
-            this.WhenAnyValue(v => v.ViewModel)
-                .Where(vm => vm != null)
-                .Select(vm => vm!.WhenAnyValue(x => x.HomeWaveVersion))
-                .Switch()
+            this.WhenAnyValue(v => v.ViewModel!.HomeWaveVersion)
                 .Subscribe(_ => DrawWave())
                 .DisposeWith(disposables);
         });
